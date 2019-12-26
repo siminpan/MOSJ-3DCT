@@ -1,0 +1,69 @@
+CT Image REG
+
+Segment t and f
+Make model for t
+Surface toolbox Mirror right t
+
+Surface Registration(under 3D Slicer v.4.10.2, v.4.11 only have Model Registration. Result seems the same)
+ for Mirror right t to left t 
+        Have transformation_3
+Copy volume of right or make labelmap form right t (and f)
+Transformation_4 on top left from 1 to -1 (mirror labelmap)
+Transform_4 within transformation_3
+
+in Data view harden transform will lock the transformation for good
+
+followed by General registration(BRAINS works better than Elastix) of the volume under transformation_4 under transformation_3
+get new Slicer Linear Transformation apply to transformation_3
+
+get model back to siegment(in a new seg hierarchy) and cut to make matching end with the left-t
+
+get model out for both and model to model distance
+
+Model to model distance (signed closet )
+
+fixed: left    VTK Output File_2
+and
+fixed: right   VTK Output File_3
+
+result is different get both.
+
+use python script for histogram, data output and plot
+
+
+
+
+
+landmark Registration manual finetune 
+
+Model to model dist
+Segment Comparison(in SlicerRT) —  95% Hausdorff distance
+https://discourse.slicer.org/t/model-to-model-distance/5551/2
+Code:
+https://discourse.slicer.org/t/model-to-model-distance-module-questions/3481/7
+CLI module code
+https://www.slicer.org/wiki/Documentation/Nightly/Developers/Python_scripting#Running_a_CLI_from_Python
+
+
+Segment Registration
+https://discourse.slicer.org/t/model-to-model-distance-calculation/8060/4
+
+General registration 
+
+Fiducial registration wizard and/or Surface registration modules in SlicerIGT extension
+https://discourse.slicer.org/t/mirror-in-surface-toolbox/3297/6
+
+https://discourse.slicer.org/t/saved-transformed-registration-for-calculating-model-to-model-distance/4739/5
+
+SurfaceICPRegistration
+https://www.slicer.org/wiki/Modules:PythonSurfaceICPRegistration-Documentation-3.6
+
+CMFreg
+https://www.slicer.org/wiki/Documentation/4.10/Modules/SurfaceRegistration
+
+You may be able to compute displacement field directly from the original CT volumes, using SlicerElastix extension.
+https://discourse.slicer.org/t/calculating-the-displacement-between-two-models/4012/2
+
+Output Model to model distance
+ChangeTracker
+https://discourse.slicer.org/t/calculating-distance-using-maurer-distance-map/1848/10
