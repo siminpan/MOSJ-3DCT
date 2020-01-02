@@ -18,6 +18,8 @@ if key in list2:
 
 keylist2 = list(list2.keys())
 
+print(keylist2[2])
+
 # find the left-t Right-t ----
 
 
