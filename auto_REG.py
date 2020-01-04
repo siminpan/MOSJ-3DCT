@@ -16,10 +16,28 @@ key = "LinearTransform_3"
 if key in list2:
     print(key, value)
 
+print(list(list2.keys())[list(list2.values()).index(LinearTransform_3)])
+
 keylist2 = list(list2.keys())
 
 print(keylist2[2])
 
+
+list(list2.items()).index(??)
+
+list(list2.items())[2]
+list(list2.items())[2][0]
+keyword = 'Interaction'
+for keyword in list(list2.items()):
+    list(list2.items()).index(output)
+
+output = [item for item in list(list2.items())
+ if item[0] == 'Interaction']
+
+[i for i, v in enumerate(list(list2.items())) if v[0] == 'ModelStorage_\d']
+
+list(list2.keys())[2]
+list(list2.values())[2][0]
 # find the left-t Right-t ----
 
 
