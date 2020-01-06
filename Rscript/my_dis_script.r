@@ -11,31 +11,33 @@
 ## computed. The idea is that, if there is a tumor on one leg, it will be evident by 
 ## non-zero distances, where bone has either grown or degraded. 
 ##
+setwd("/mnt/md0/zlyrebecca/sp/MOSJ-CT/05.6_3Dpoints")
 
-y_DkkMo_1 <- drop(as.matrix(read.csv("02_Distances/DkkMo-t/dist_csvs/dist_1.csv", 
-  header = F)))
+
+y_DkkMo_1 <- read.csv("DkkMo-t/27_VTK_IO.csv", 
+  skip = 1, colClasses = c(rep("numeric", 1), rep("NULL", 13)), header = F)
 y_DkkMo_2 <- drop(as.matrix(read.csv("02_Distances/DkkMo-t/dist_csvs/dist_2.csv", 
-  header = F)))
+  skip = 1, colClasses = c(rep("numeric", 1), rep("NULL", 13)), header = F)))
 y_DkkMo_3 <- drop(as.matrix(read.csv("02_Distances/DkkMo-t/dist_csvs/dist_3.csv", 
-  header = F)))
+  skip = 1, colClasses = c(rep("numeric", 1), rep("NULL", 13)), header = F)))
 
 y_DkkMoDRB_1 <- drop(as.matrix(read.csv("02_Distances/DkkMoDRB-t/dist_csvs/dist_1.csv", 
-  header = F)))
+  skip = 1, colClasses = c(rep("numeric", 1), rep("NULL", 13)), header = F)))
 y_DkkMoDRB_2 <- drop(as.matrix(read.csv("02_Distances/DkkMoDRB-t/dist_csvs/dist_2.csv", 
-  header = F)))
+  skip = 1, colClasses = c(rep("numeric", 1), rep("NULL", 13)), header = F)))
 y_DkkMoDRB_3 <- drop(as.matrix(read.csv("02_Distances/DkkMoDRB-t/dist_csvs/dist_3.csv", 
-  header = F)))
+  skip = 1, colClasses = c(rep("numeric", 1), rep("NULL", 13)), header = F)))
 
 y_DRB_1 <- drop(as.matrix(read.csv("02_Distances/DRB-t/dist_csvs/dist_1.csv", 
-  header = F)))
+  skip = 1, colClasses = c(rep("numeric", 1), rep("NULL", 13)), header = F)))
 y_DRB_2 <- drop(as.matrix(read.csv("02_Distances/DRB-t/dist_csvs/dist_2.csv", 
-  header = F)))
+  skip = 1, colClasses = c(rep("numeric", 1), rep("NULL", 13)), header = F)))
 y_DRB_3 <- drop(as.matrix(read.csv("02_Distances/DRB-t/dist_csvs/dist_3.csv", 
-  header = F)))
+  skip = 1, colClasses = c(rep("numeric", 1), rep("NULL", 13)), header = F)))
 
-y_NT_1 <- drop(as.matrix(read.csv("02_Distances/NT-t/dist_csvs/dist_1.csv", header = F)))
-y_NT_2 <- drop(as.matrix(read.csv("02_Distances/NT-t/dist_csvs/dist_2.csv", header = F)))
-y_NT_3 <- drop(as.matrix(read.csv("02_Distances/NT-t/dist_csvs/dist_3.csv", header = F)))
+y_NT_1 <- drop(as.matrix(read.csv("02_Distances/NT-t/dist_csvs/dist_1.csv", skip = 1, colClasses = c(rep("numeric", 1), rep("NULL", 13)), header = F)))
+y_NT_2 <- drop(as.matrix(read.csv("02_Distances/NT-t/dist_csvs/dist_2.csv", skip = 1, colClasses = c(rep("numeric", 1), rep("NULL", 13)), header = F)))
+y_NT_3 <- drop(as.matrix(read.csv("02_Distances/NT-t/dist_csvs/dist_3.csv", skip = 1, colClasses = c(rep("numeric", 1), rep("NULL", 13)), header = F)))
 
 ## Organize into list for convenience.
 x <- factor(c(rep("DkkMo", 3), rep("DkkMoDRB", 3), rep("DRB", 3), rep("NT", 3)))
