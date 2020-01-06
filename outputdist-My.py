@@ -60,7 +60,7 @@ name = 'VTK Output File_2'
 modelNode = getNode(name)
 
 outpath = 'C:/Users/span/Documents/MOSJ-TumorInjection/05.5_distances/'
-outpath = 'C:/Users/span/Documents/MOSJ-TumorInjection/05.6_3Dpoints/'
+# outpath = 'C:/Users/span/Documents/MOSJ-TumorInjection/05.6_3Dpoints/'
 outfolder = 'NT-t/'
 ainmalid = '08_slicer_IO'
 
@@ -80,10 +80,10 @@ import csv
 
 inpath = 'C:/Users/span/Documents/MOSJ-TumorInjection/05_3DSlicer/'
 outpath = 'C:/Users/span/Documents/MOSJ-TumorInjection/05.6_3Dpoints/'
-infolder = '08_20190410_C_NoHole_Left_DV/'
+infolder = '39_20190401_VDRB2_RightHole_Left_DV/'
 name = 'VTK Output File_2'
-outfolder = 'NT-t/'
-outcsv = '08_VTK_IO'
+outfolder = 'DkkMoDRB-t/'
+outcsv = '39_VTK_IO'
 
 fileIn  = inpath + infolder + name + '.vtk'
 fileOut  = outpath + outfolder + outcsv + '.csv'
