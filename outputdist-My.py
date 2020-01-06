@@ -59,21 +59,34 @@ newModel2.Modified()
 name = 'VTK Output File_2'
 modelNode = getNode(name)
 
-space3d = slicer.util.arrayFromModelPoints(modelNode)
-np.savetxt("C:/Users/span/Documents/MOSJ-TumorInjection/05_3DSlicer/temp.csv", space3d, delimiter=",")
+outpath = 'C:/Users/span/Documents/MOSJ-TumorInjection/05.5_distances/'
+outpath = 'C:/Users/span/Documents/MOSJ-TumorInjection/05.6_3Dpoints/'
+outfolder = 'NT-t/'
+ainmalid = '08_slicer_IO'
 
+# fileIn  = path + name + '.vtk'
+fileOut  = outpath + outfolder + ainmalid + '.csv'
+
+space3d = slicer.util.arrayFromModelPoints(modelNode)
+np.savetxt(fileOut, space3d, delimiter=",")
+
+################ 3D points and Signed all included ############################
 # VTK IO classes
 # https://discourse.vtk.org/t/save-polydata-to-csv-using-vtkdelimitedtextwriter/986/4
 # working progess ----
 import vtk
 import csv
 
-name = 'VTK Output File_3'
-path = 'C:/Users/span/Documents/MOSJ-TumorInjection/05_3DSlicer/37_20180911_VDRB1_2Left_Left_DV/'
-outcsv = 'myTable3'
 
-fileIn  = path + name + '.vtk'
-fileOut  = path + outcsv + '.csv'
+inpath = 'C:/Users/span/Documents/MOSJ-TumorInjection/05_3DSlicer/'
+outpath = 'C:/Users/span/Documents/MOSJ-TumorInjection/05.6_3Dpoints/'
+infolder = '08_20190410_C_NoHole_Left_DV/'
+name = 'VTK Output File_2'
+outfolder = 'NT-t/'
+outcsv = '08_VTK_IO'
+
+fileIn  = inpath + infolder + name + '.vtk'
+fileOut  = outpath + outfolder + outcsv + '.csv'
 
 reader = vtk.vtkGenericDataObjectReader()
 reader.SetFileName(fileIn)
@@ -160,17 +173,23 @@ m1.GetDisplayNode().SetScalarVisibility(True)
 
 
 # Start
-modelNode = getNode('VTK Output File_2')
+
+name = 'VTK Output File_2'
+modelNode = getNode(name)
 distanceArrayName = "Signed"
 
 # Get distances from point data
 import numpy as np
 distances = vtk.util.numpy_support.vtk_to_numpy(modelNode.GetPolyData().GetPointData().GetArray(distanceArrayName))
 
+outpath = 'C:/Users/span/Documents/MOSJ-TumorInjection/05.5_distances/'
+outfolder = 'NT-t/'
+ainmalid = '08_distances'
+
+fileOut  = outpath + outfolder + ainmalid + '.csv'
 # write csv
 # import numpy as np
-np.savetxt("C:/Users/span/Documents/MOSJ-TumorInjection/05_3DSlicer/distances/\
-VDRB1_2Left-t-D.csv", distances, delimiter=",")
+np.savetxt(fileOut, distances, delimiter=",")
 
 # Print basic stats
 print(distances)
