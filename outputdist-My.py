@@ -56,6 +56,9 @@ newModel2.Modified()
 
 ############### 3D points ##########################
 # slicer IO classes
+name = 'VTK Output File_2'
+modelNode = getNode(name)
+
 space3d = slicer.util.arrayFromModelPoints(modelNode)
 np.savetxt("C:/Users/span/Documents/MOSJ-TumorInjection/05_3DSlicer/temp.csv", space3d, delimiter=",")
 
