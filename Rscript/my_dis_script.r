@@ -104,10 +104,25 @@ for(b in 1:B) {
   KS_0[b] <- max(ks.test(y_0_1, y_0)$st, ks.test(y_0_2, y_0)$st, ks.test(y_0_3, y_0)$st)
 }
 
+KS_00 <- as.data.frame(x=KS_0)
+write.csv(KS_00, "KS_00.csv")
 ## Compute p-values.
 p_val_DkkMo <- mean(KS_DkkMo <= KS_0)
 p_val_DkkMoDRB <- mean(KS_DkkMoDRB <= KS_0)
 p_val_DRB <- mean(KS_DRB <= KS_0)
 
+
+y_01 <- data.frame(data = y_NT_1, id = rep("y_01", length(y_NT_1)))
+y_02 <- data.frame(data = y_NT_2, id = rep("y_02", length(y_NT_2)))
+y_03 <- data.frame(data = y_NT_3, id = rep("y_03", length(y_NT_3)))
+y_04 <- data.frame(data = y_NT_4, id = rep("y_04", length(y_NT_4)))
+
+y_00 <- rbind(y_01, y_02, y_03, y_04)
+h_NT <- ggplot(y_00, aes(x=data)) + 
+  geom_histogram(data = subset(y_00,id == 'y_01'), fill = colors()[1], alpha = 0.2) + 
+  geom_histogram(data = subset(y_00,id == 'y_02'), fill = colors()[11], alpha = 0.2) +
+  geom_histogram(data = subset(y_00,id == 'y_03'), fill = colors()[21], alpha = 0.2) +
+  geom_histogram(data = subset(y_00,id == 'y_04'), fill = colors()[31], alpha = 0.2)
+)
 
 
