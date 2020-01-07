@@ -5,6 +5,9 @@
 #### across comparison groups.
 ####
 
+library(e1071)
+library(ggplot2)
+
 ##
 ## Load data on distances between images. The images of two legs were superimposed on 
 ## each other, and pixel-wise distances between one image and its nearest point were 
@@ -112,17 +115,146 @@ p_val_DkkMoDRB <- mean(KS_DkkMoDRB <= KS_0)
 p_val_DRB <- mean(KS_DRB <= KS_0)
 
 
-y_01 <- data.frame(data = y_NT_1, id = rep("y_01", length(y_NT_1)))
-y_02 <- data.frame(data = y_NT_2, id = rep("y_02", length(y_NT_2)))
-y_03 <- data.frame(data = y_NT_3, id = rep("y_03", length(y_NT_3)))
-y_04 <- data.frame(data = y_NT_4, id = rep("y_04", length(y_NT_4)))
+# plot ----
 
-y_00 <- rbind(y_01, y_02, y_03, y_04)
+# y_01 <- data.frame(data = -y_NT_1, id = rep("y_01", length(y_NT_1)))
+# y_02 <- data.frame(data = -y_NT_2, id = rep("y_02", length(y_NT_2)))
+# y_03 <- data.frame(data = -y_NT_3, id = rep("y_03", length(y_NT_3)))
+# y_04 <- data.frame(data = -y_NT_4, id = rep("y_04", length(y_NT_4)))
+# y_05 <- data.frame(data = -y_NT_5, id = rep("y_05", length(y_NT_5)))
+# y_06 <- data.frame(data = -y_NT_6, id = rep("y_06", length(y_NT_6)))
+
+y_00 <- data.frame(data = numeric(), id = character())
+skewness_00 <- data.frame(skewness = numeric(), id = character(), stringsAsFactors = FALSE)
+median_00 <- data.frame(median = numeric(), id = character(), stringsAsFactors = FALSE)
+for(i in 1:10){
+  nam <- paste("y_0", i, sep = "")
+  assign(nam, 
+         data.frame(data = -get(paste("y_NT_", i, sep = "")), 
+                    id = rep(paste("y_0", i, sep = ""), 
+                             length(get(paste("y_NT_", i, sep = ""))))
+                    )
+         )
+  y_00 <- rbind(y_00, get(nam))
+  skewness_00[i,1] <- skewness(get(nam)$data, type = 2)
+  skewness_00[i,2] <- paste("y_0", i, sep = "")
+  median_00[i,1] <- median(get(nam)$data) 
+  median_00[i,2] <- paste("y_0", i, sep = "")
+}
+
+
 h_NT <- ggplot(y_00, aes(x=data)) + 
-  geom_histogram(data = subset(y_00,id == 'y_01'), fill = colors()[1], alpha = 0.2) + 
-  geom_histogram(data = subset(y_00,id == 'y_02'), fill = colors()[11], alpha = 0.2) +
-  geom_histogram(data = subset(y_00,id == 'y_03'), fill = colors()[21], alpha = 0.2) +
-  geom_histogram(data = subset(y_00,id == 'y_04'), fill = colors()[31], alpha = 0.2)
-)
+  geom_vline(xintercept = 0, linetype="dotted", 
+             color = "red", size=1.0) +
+  geom_histogram(data = subset(y_00,id == 'y_01'), fill = colors()[1], alpha = 0.3) + 
+  geom_histogram(data = subset(y_00,id == 'y_02'), fill = colors()[11], alpha = 0.3) +
+  geom_histogram(data = subset(y_00,id == 'y_03'), fill = colors()[21], alpha = 0.3) +
+  geom_histogram(data = subset(y_00,id == 'y_04'), fill = colors()[31], alpha = 0.3) +
+  geom_histogram(data = subset(y_00,id == 'y_05'), fill = colors()[41], alpha = 0.3) +
+  geom_histogram(data = subset(y_00,id == 'y_06'), fill = colors()[51], alpha = 0.3) +
+  geom_histogram(data = subset(y_00,id == 'y_07'), fill = colors()[61], alpha = 0.3) +
+  geom_histogram(data = subset(y_00,id == 'y_08'), fill = colors()[71], alpha = 0.3) +
+  geom_histogram(data = subset(y_00,id == 'y_09'), fill = colors()[81], alpha = 0.3) +
+  geom_histogram(data = subset(y_00,id == 'y_010'), fill = colors()[91], alpha = 0.3)
+
+h_NT
+
+h_NT2 <- ggplot(y_00, aes(x=data)) + 
+  geom_vline(xintercept = 0, linetype="dotted", 
+             color = "red", size=1.0) +
+  geom_histogram(data = subset(y_00,id == 'y_01'), fill = colors()[1], alpha = 0.3) + 
+  geom_histogram(data = subset(y_00,id == 'y_02'), fill = colors()[11], alpha = 0.3) +
+  geom_histogram(data = subset(y_00,id == 'y_03'), fill = colors()[21], alpha = 0.3) +
+  # geom_histogram(data = subset(y_00,id == 'y_04'), fill = colors()[31], alpha = 0.3) +
+  # geom_histogram(data = subset(y_00,id == 'y_05'), fill = colors()[41], alpha = 0.3) +
+  # geom_histogram(data = subset(y_00,id == 'y_06'), fill = colors()[51], alpha = 0.3) +
+  geom_histogram(data = subset(y_00,id == 'y_07'), fill = colors()[31], alpha = 0.3) # +
+  # geom_histogram(data = subset(y_00,id == 'y_08'), fill = colors()[71], alpha = 0.3) +
+  # geom_histogram(data = subset(y_00,id == 'y_09'), fill = colors()[81], alpha = 0.3) +
+  # geom_histogram(data = subset(y_00,id == 'y_010'), fill = colors()[91], alpha = 0.3)
+
+h_NT2
+
+dk_00 <- data.frame(data = numeric(), id = character())
+skewness_01 <- data.frame(skewness = numeric(), id = character(), stringsAsFactors = FALSE)
+median_01 <- data.frame(median = numeric(), id = character(), stringsAsFactors = FALSE)
+for(i in 1:5){
+  nam <- paste("dk_0", i, sep = "")
+  assign(nam, 
+         data.frame(data = -get(paste("y_DkkMo_", i, sep = "")), 
+                    id = rep(paste("dk_0", i, sep = ""), 
+                             length(get(paste("y_DkkMo_", i, sep = ""))))
+         )
+  )
+  dk_00 <- rbind(dk_00, get(nam))
+  skewness_01[i,1] <- skewness(get(nam)$data, type = 2)
+  skewness_01[i,2] <- paste("dk_0", i, sep = "")
+  median_01[i,1] <- median(get(nam)$data) 
+  median_01[i,2] <- paste("dk_0", i, sep = "")
+}
+h_DK <- ggplot(dk_00, aes(x=data)) + 
+  geom_vline(xintercept = 0, linetype="dotted", 
+             color = "red", size=1.0) +
+  geom_histogram(data = subset(dk_00,id == 'dk_01'), fill = colors()[1], alpha = 0.3) + 
+  geom_histogram(data = subset(dk_00,id == 'dk_02'), fill = colors()[11], alpha = 0.3) +
+  geom_histogram(data = subset(dk_00,id == 'dk_03'), fill = colors()[21], alpha = 0.3) +
+  geom_histogram(data = subset(dk_00,id == 'dk_04'), fill = colors()[31], alpha = 0.3) +
+  geom_histogram(data = subset(dk_00,id == 'dk_05'), fill = colors()[41], alpha = 0.3)
+
+h_DK 
+
+dkdrb_00 <- data.frame(data = numeric(), id = character())
+skewness_02 <- data.frame(skewness = numeric(), id = character(), stringsAsFactors = FALSE)
+median_02 <- data.frame(median = numeric(), id = character(), stringsAsFactors = FALSE)
+for(i in 1:4){
+  nam <- paste("dkdrb_0", i, sep = "")
+  assign(nam, 
+         data.frame(data = -get(paste("y_DkkMoDRB_", i, sep = "")), 
+                    id = rep(paste("dkdrb_0", i, sep = ""), 
+                             length(get(paste("y_DkkMoDRB_", i, sep = ""))))
+         )
+  )
+  dkdrb_00 <- rbind(dkdrb_00, get(nam))
+  skewness_02[i,1] <- skewness(get(nam)$data, type = 2)
+  skewness_02[i,2] <- paste("dkdrb_0", i, sep = "")
+  median_02[i,1] <- median(get(nam)$data) 
+  median_02[i,2] <- paste("dkdrb_0", i, sep = "")
+}
+h_DKDRB <- ggplot(dkdrb_00, aes(x=data)) + 
+  geom_vline(xintercept = 0, linetype="dotted", 
+             color = "red", size=1.0) +
+  geom_histogram(data = subset(dkdrb_00,id == 'dkdrb_01'), fill = colors()[1], alpha = 0.3) + 
+  geom_histogram(data = subset(dkdrb_00,id == 'dkdrb_02'), fill = colors()[11], alpha = 0.3) +
+  geom_histogram(data = subset(dkdrb_00,id == 'dkdrb_03'), fill = colors()[21], alpha = 0.3) +
+  geom_histogram(data = subset(dkdrb_00,id == 'dkdrb_04'), fill = colors()[31], alpha = 0.3)
+
+h_DKDRB
+
+drb_00 <- data.frame(data = numeric(), id = character())
+skewness_03 <- data.frame(skewness = numeric(), id = character(), stringsAsFactors = FALSE)
+median_03 <- data.frame(median = numeric(), id = character(), stringsAsFactors = FALSE)
+for(i in 1:4){
+  nam <- paste("drb_0", i, sep = "")
+  assign(nam, 
+         data.frame(data = -get(paste("y_DRB_", i, sep = "")), 
+                    id = rep(paste("drb_0", i, sep = ""), 
+                             length(get(paste("y_DRB_", i, sep = ""))))
+         )
+  )
+  drb_00 <- rbind(drb_00, get(nam))
+  skewness_03[i,1] <- skewness(get(nam)$data, type = 2)
+  skewness_03[i,2] <- paste("drb_0", i, sep = "")
+  median_03[i,1] <- median(get(nam)$data) 
+  median_03[i,2] <- paste("drb_0", i, sep = "")
+}
+h_DRB <- ggplot(drb_00, aes(x=data)) + 
+  geom_vline(xintercept = 0, linetype="dotted", 
+             color = "red", size=1.0) +
+  geom_histogram(data = subset(drb_00,id == 'drb_01'), fill = colors()[1], alpha = 0.3) + 
+  geom_histogram(data = subset(drb_00,id == 'drb_02'), fill = colors()[11], alpha = 0.3) +
+  geom_histogram(data = subset(drb_00,id == 'drb_03'), fill = colors()[21], alpha = 0.3) +
+  geom_histogram(data = subset(drb_00,id == 'drb_04'), fill = colors()[31], alpha = 0.3)
+
+h_DRB
 
 
