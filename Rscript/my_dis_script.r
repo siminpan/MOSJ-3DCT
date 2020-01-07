@@ -162,6 +162,7 @@ h_NT
 h_NT2 <- ggplot(y_00, aes(x=data)) + 
   geom_vline(xintercept = 0, linetype="dotted", 
              color = "red", size=1.0) +
+  xlim(-0.5, 0.5) +
   geom_histogram(data = subset(y_00,id == 'y_01'), fill = colors()[1], alpha = 0.3) + 
   geom_histogram(data = subset(y_00,id == 'y_02'), fill = colors()[11], alpha = 0.3) +
   geom_histogram(data = subset(y_00,id == 'y_03'), fill = colors()[21], alpha = 0.3) +
@@ -195,6 +196,7 @@ for(i in 1:5){
 h_DK <- ggplot(dk_00, aes(x=data)) + 
   geom_vline(xintercept = 0, linetype="dotted", 
              color = "red", size=1.0) +
+  xlim(-0.5, 0.5) +
   geom_histogram(data = subset(dk_00,id == 'dk_01'), fill = colors()[1], alpha = 0.3) + 
   geom_histogram(data = subset(dk_00,id == 'dk_02'), fill = colors()[11], alpha = 0.3) +
   geom_histogram(data = subset(dk_00,id == 'dk_03'), fill = colors()[21], alpha = 0.3) +
@@ -223,6 +225,7 @@ for(i in 1:4){
 h_DKDRB <- ggplot(dkdrb_00, aes(x=data)) + 
   geom_vline(xintercept = 0, linetype="dotted", 
              color = "red", size=1.0) +
+  xlim(-0.5, 0.5) +
   geom_histogram(data = subset(dkdrb_00,id == 'dkdrb_01'), fill = colors()[1], alpha = 0.3) + 
   geom_histogram(data = subset(dkdrb_00,id == 'dkdrb_02'), fill = colors()[11], alpha = 0.3) +
   geom_histogram(data = subset(dkdrb_00,id == 'dkdrb_03'), fill = colors()[21], alpha = 0.3) +
@@ -250,6 +253,7 @@ for(i in 1:4){
 h_DRB <- ggplot(drb_00, aes(x=data)) + 
   geom_vline(xintercept = 0, linetype="dotted", 
              color = "red", size=1.0) +
+  xlim(-0.5, 0.5) +
   geom_histogram(data = subset(drb_00,id == 'drb_01'), fill = colors()[1], alpha = 0.3) + 
   geom_histogram(data = subset(drb_00,id == 'drb_02'), fill = colors()[11], alpha = 0.3) +
   geom_histogram(data = subset(drb_00,id == 'drb_03'), fill = colors()[21], alpha = 0.3) +
