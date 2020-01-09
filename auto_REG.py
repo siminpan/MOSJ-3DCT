@@ -60,7 +60,8 @@ output = [item for item in list(list2.items())
 list(list2.keys())[2]
 list(list2.values())[2][0]
 
-
+# https://discourse.slicer.org/t/export-segmentation-to-labelmap-using-python/6801
+# https://www.slicer.org/wiki/Documentation/Nightly/ScriptRepository#Export_labelmap_node_from_segmentation_node
 #  ('Segmentation', (MRMLCorePython.vtkMRMLSegmentationNode)0000022A48FA3408)
 seg = getNode('Segmentation')
 exportedModelsNode = slicer.mrmlScene.AddNewNodeByClass('vtkMRMLModelHierarchyNode')
@@ -68,6 +69,9 @@ slicer.modules.segmentations.logic().ExportAllSegmentsToModelHierarchy(seg, expo
 
 # ('ModelHierarchy_2', (MRMLCorePython.vtkMRMLModelHierarchyNode)0000022A48FA36A8)
 
+
+# Femur segmentation using masked region growing in 3D Slicer
+# https://www.youtube.com/watch?v=8Nbi1Co2rhY&t=31s
 
 # find the left-t Right-t ----
 
