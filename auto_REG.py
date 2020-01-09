@@ -1,3 +1,24 @@
+# reset all variables 
+# too clean evern slicer.** can't work
+import sys
+
+sys.modules[__name__].__dict__.clear()
+
+this = sys.modules[__name__]
+for n in dir():
+   if n[0]!='_': delattr(this, n) 
+ 
+# delete individual names
+del x
+# remove them from the globals() object:
+for name in dir():
+    if not name.startswith('_'):
+        del globals()[name]
+        
+for name in dir():
+    if not name.startswith('_'):
+        del locals()[name]
+        
 # list all Data item ----
 import numpy
 import pandas as pd
@@ -12,7 +33,7 @@ list2 = slicer.util.getNodes()
 for key, value in list2.items():
     print(key, value)
 
-key = "LinearTransform_3"
+key = 'Segmentation'
 if key in list2:
     print(key, value)
 
@@ -38,6 +59,16 @@ output = [item for item in list(list2.items())
 
 list(list2.keys())[2]
 list(list2.values())[2][0]
+
+
+#  ('Segmentation', (MRMLCorePython.vtkMRMLSegmentationNode)0000022A48FA3408)
+seg = getNode('Segmentation')
+exportedModelsNode = slicer.mrmlScene.AddNewNodeByClass('vtkMRMLModelHierarchyNode')
+slicer.modules.segmentations.logic().ExportAllSegmentsToModelHierarchy(seg, exportedModelsNode)
+
+# ('ModelHierarchy_2', (MRMLCorePython.vtkMRMLModelHierarchyNode)0000022A48FA36A8)
+
+
 # find the left-t Right-t ----
 
 
