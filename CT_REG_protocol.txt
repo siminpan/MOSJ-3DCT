@@ -1,4 +1,4 @@
-CT Image REG
+CT Image REG:
 
 Segment t and f
 Make model for t
@@ -32,6 +32,15 @@ use python script for histogram, data output and plot
 
 
 
+
+Stained sample:
+
+Grow from seed 
+ Nvidia AIAA
+
+reg the bone scan
+
+volume reminder
 
 
 landmark Registration manual finetune 
