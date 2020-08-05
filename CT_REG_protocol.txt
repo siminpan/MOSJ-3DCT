@@ -2,7 +2,7 @@ CT Image REG:
 
 Segment t and f
 Make model for t
-Surface toolbox Mirror right t
+Surface toolbox Mirror right t (x-axis)
 
 Surface Registration(under 3D Slicer v.4.10.2, v.4.11 only have Model Registration. Result seems the same)
  for Mirror right t to left t 
