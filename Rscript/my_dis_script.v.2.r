@@ -14,56 +14,48 @@ library(ggplot2)
 ## computed. The idea is that, if there is a tumor on one leg, it will be evident by 
 ## non-zero distances, where bone has either grown or degraded. 
 ##
-setwd("/mnt/md0/zlyrebecca/sp/MOSJ-CT/05.6_3Dpoints")
+workd = "/mnt/md0/zlyrebecca/sp/MOSJ-CT/05.6_3Dpoints"
+setwd(workd)
+path1 = "/NT-t/"
+list_NT = list.files(path = paste0(workd, path1), pattern = "_VTK_IO.csv")
+list_NT = list_NT[-1]
+path2 = "/DRB-t/"
+list_DRB = list.files(path = paste0(workd, path2), pattern = "_VTK_IO.csv")
+path3 = "/DkkMo-t/"
+list_DK = list.files(path = paste0(workd, path3), pattern = "_VTK_IO.csv")
+path4 = "/DkkMoDRB-t/"
+list_DKD = list.files(path = paste0(workd, path4), pattern = "_VTK_IO.csv")
 
+list_NT1 = sprintf("nt%02d", 1:length(list_NT))
+list_DRB1 = sprintf("drb%02d", 1:length(list_DRB))
+list_DK1 = sprintf("dk%02d", 1:length(list_DK))
+list_DKD1 = sprintf("dkd%02d", 1:length(list_DKD))
 
-y_DkkMo_1 <- drop(as.matrix(read.csv("DkkMo-t/27_VTK_IO.csv", 
-  skip = 1, colClasses = c(rep("numeric", 1), rep("NULL", 13)), header = F)))
-y_DkkMo_2 <- drop(as.matrix(read.csv("DkkMo-t/28_VTK_IO.csv", 
-  skip = 1, colClasses = c(rep("numeric", 1), rep("NULL", 13)), header = F)))
-y_DkkMo_3 <- drop(as.matrix(read.csv("DkkMo-t/30_VTK_IO.csv", 
-  skip = 1, colClasses = c(rep("numeric", 1), rep("NULL", 13)), header = F)))
-y_DkkMo_4 <- drop(as.matrix(read.csv("DkkMo-t/31_VTK_IO.csv", 
-  skip = 1, colClasses = c(rep("numeric", 1), rep("NULL", 13)), header = F)))
-y_DkkMo_5 <- drop(as.matrix(read.csv("DkkMo-t/32_VTK_IO.csv", 
-                                     skip = 1, colClasses = c(rep("numeric", 1), rep("NULL", 13)), header = F)))
-
-y_DkkMoDRB_1 <- drop(as.matrix(read.csv("DkkMoDRB-t/36_VTK_IO.csv", 
-  skip = 1, colClasses = c(rep("numeric", 1), rep("NULL", 13)), header = F)))
-y_DkkMoDRB_2 <- drop(as.matrix(read.csv("DkkMoDRB-t/37_VTK_IO.csv", 
-  skip = 1, colClasses = c(rep("numeric", 1), rep("NULL", 13)), header = F)))
-y_DkkMoDRB_3 <- drop(as.matrix(read.csv("DkkMoDRB-t/38_VTK_IO.csv", 
-  skip = 1, colClasses = c(rep("numeric", 1), rep("NULL", 13)), header = F)))
-y_DkkMoDRB_4 <- drop(as.matrix(read.csv("DkkMoDRB-t/39_VTK_IO.csv", 
-                                        skip = 1, colClasses = c(rep("numeric", 1), rep("NULL", 13)), header = F)))
-
-y_DRB_1 <- drop(as.matrix(read.csv("DRB-t/13_VTK_IO.csv", 
-  skip = 1, colClasses = c(rep("numeric", 1), rep("NULL", 13)), header = F)))
-y_DRB_2 <- drop(as.matrix(read.csv("DRB-t/14_VTK_IO.csv", 
-  skip = 1, colClasses = c(rep("numeric", 1), rep("NULL", 13)), header = F)))
-y_DRB_3 <- drop(as.matrix(read.csv("DRB-t/19_VTK_IO.csv", 
-  skip = 1, colClasses = c(rep("numeric", 1), rep("NULL", 13)), header = F)))
-y_DRB_4 <- drop(as.matrix(read.csv("DRB-t/21_VTK_IO.csv", 
-                                   skip = 1, colClasses = c(rep("numeric", 1), rep("NULL", 13)), header = F)))
-
-y_NT_1 <- drop(as.matrix(read.csv("NT-t/04_VTK_IO.csv", skip = 1, colClasses = c(rep("numeric", 1), rep("NULL", 13)), header = F)))
-y_NT_2 <- drop(as.matrix(read.csv("NT-t/05_VTK_IO.csv", skip = 1, colClasses = c(rep("numeric", 1), rep("NULL", 13)), header = F)))
-y_NT_3 <- drop(as.matrix(read.csv("NT-t/06_VTK_IO.csv", skip = 1, colClasses = c(rep("numeric", 1), rep("NULL", 13)), header = F)))
-y_NT_4 <- drop(as.matrix(read.csv("NT-t/07_VTK_IO.csv", skip = 1, colClasses = c(rep("numeric", 1), rep("NULL", 13)), header = F)))
-y_NT_5 <- drop(as.matrix(read.csv("NT-t/08_VTK_IO.csv", skip = 1, colClasses = c(rep("numeric", 1), rep("NULL", 13)), header = F)))
-y_NT_6 <- drop(as.matrix(read.csv("NT-t/09_VTK_IO.csv", skip = 1, colClasses = c(rep("numeric", 1), rep("NULL", 13)), header = F)))
-y_NT_7 <- drop(as.matrix(read.csv("NT-t/10_VTK_IO.csv", skip = 1, colClasses = c(rep("numeric", 1), rep("NULL", 13)), header = F)))
-y_NT_8 <- drop(as.matrix(read.csv("NT-t/11_VTK_IO.csv", skip = 1, colClasses = c(rep("numeric", 1), rep("NULL", 13)), header = F)))
-y_NT_9 <- drop(as.matrix(read.csv("NT-t/12_VTK_IO.csv", skip = 1, colClasses = c(rep("numeric", 1), rep("NULL", 13)), header = F)))
-y_NT_10 <- drop(as.matrix(read.csv("NT-t/99_VTK_IO.csv", skip = 1, colClasses = c(rep("numeric", 1), rep("NULL", 13)), header = F)))
+for (i in 1:length(list_NT)){
+  assign(list_NT1[i], 
+         drop(as.matrix(read.csv(paste0(workd, path1, list_NT[i]), skip = 1, colClasses = c(rep("numeric", 1), rep("NULL", 13)), header = F))))
+}
+for (i in 1:length(list_DRB)){
+  assign(list_DRB1[i], 
+         drop(as.matrix(read.csv(paste0(workd, path2, list_DRB[i]), skip = 1, colClasses = c(rep("numeric", 1), rep("NULL", 13)), header = F))))
+}
+for (i in 1:length(list_DK)){
+  assign(list_DK1[i], 
+         drop(as.matrix(read.csv(paste0(workd, path3, list_DK[i]), skip = 1, colClasses = c(rep("numeric", 1), rep("NULL", 13)), header = F))))
+}
+for (i in 1:length(list_DKD)){
+  assign(list_DKD1[i], 
+         drop(as.matrix(read.csv(paste0(workd, path4, list_DKD[i]), skip = 1, colClasses = c(rep("numeric", 1), rep("NULL", 13)), header = F))))
+}
 
 ## Organize into list for convenience.
-x <- factor(c(rep("DkkMo", 5), rep("DkkMoDRB", 4), rep("DRB", 4), rep("NT", 10)))
-Y <- list(y_DkkMo_1, y_DkkMo_2, y_DkkMo_3, y_DkkMo_4, y_DkkMo_5, 
-          y_DkkMoDRB_1, y_DkkMoDRB_2, y_DkkMoDRB_3, y_DkkMoDRB_4,
-          y_DRB_1, y_DRB_2, y_DRB_3, y_DRB_4, 
-          y_NT_1, y_NT_2, y_NT_3, y_NT_4, y_NT_5, y_NT_6, y_NT_7, y_NT_8, y_NT_9, y_NT_10)
-  
+x <- factor(c(rep("DkkMo", length(list_DK)), 
+              rep("DkkMoDRB", length(list_DKD)), 
+              rep("DRB", length(list_DRB)), 
+              rep("NT", length(list_NT)))
+            )
+Y <- mget(eval(c(list_DK1, list_DKD1, list_DRB1, list_NT1)))
+
 ##
 ## Compare "treatment" and "control" groups. We pool the distances for the control 
 ## samples, take bootstrap samples from them, then compare distribution-test statistics 
@@ -71,32 +63,46 @@ Y <- list(y_DkkMo_1, y_DkkMo_2, y_DkkMo_3, y_DkkMo_4, y_DkkMo_5,
 ##
 
 ## Pool the control samples.
-y_0 <- c(Y[[14]], Y[[15]], Y[[16]], Y[[17]], Y[[18]], Y[[19]], Y[[20]], Y[[21]], Y[[22]], Y[[23]])
+y_0 <- c(Y[[30]],Y[[31]], Y[[32]], Y[[33]], Y[[34]], Y[[35]], Y[[36]], Y[[37]], Y[[38]], Y[[39]])
 
 ## Compute KS test statistics comparing treatment samples to the pooled control samples.
-KS_DkkMo_1 <- ks.test(Y[[1]], y_0)$stat
-KS_DkkMo_2 <- ks.test(Y[[2]], y_0)$stat
-KS_DkkMo_3 <- ks.test(Y[[3]], y_0)$stat
-KS_DkkMo_4 <- ks.test(Y[[4]], y_0)$stat
-KS_DkkMo_5 <- ks.test(Y[[5]], y_0)$stat
-KS_DkkMo <- max(KS_DkkMo_1, KS_DkkMo_2, KS_DkkMo_3, KS_DkkMo_4, KS_DkkMo_5)
 
-KS_DkkMoDRB_1 <- ks.test(Y[[6]], y_0)$stat
-KS_DkkMoDRB_2 <- ks.test(Y[[7]], y_0)$stat
-KS_DkkMoDRB_3 <- ks.test(Y[[8]], y_0)$stat
-KS_DkkMoDRB_4 <- ks.test(Y[[9]], y_0)$stat
-KS_DkkMoDRB <- max(KS_DkkMoDRB_1, KS_DkkMoDRB_2, KS_DkkMoDRB_3, KS_DkkMoDRB_4)
+list_NT2 = sprintf("ks_nt%02d", 1:length(list_NT))
+list_DRB2 = sprintf("ks_drb%02d", 1:length(list_DRB))
+list_DK2 = sprintf("ks_dk%02d", 1:length(list_DK))
+list_DKD2 = sprintf("ks_dkd%02d", 1:length(list_DKD))
 
-KS_DRB_1 <- ks.test(Y[[10]], y_0)$stat
-KS_DRB_2 <- ks.test(Y[[11]], y_0)$stat
-KS_DRB_3 <- ks.test(Y[[12]], y_0)$stat
-KS_DRB_4 <- ks.test(Y[[13]], y_0)$stat
-KS_DRB <- max(KS_DRB_1, KS_DRB_2, KS_DRB_3, KS_DRB_4)
+# for (i in 1:length(list_NT)){
+#   assign(list_NT2[i], 
+#          ks.test(get(list_NT1[i]), y_0)$stat)
+#   
+# }
+for (i in 1:length(list_DRB)){
+  assign(list_DRB2[i], 
+         ks.test(get(list_DRB1[i]), y_0)$stat)
+  
+}
+for (i in 1:length(list_DK)){
+  assign(list_DK2[i], 
+         ks.test(get(list_DK1[i]), y_0)$stat)
+  
+}
+for (i in 1:length(list_DKD)){
+  assign(list_DKD2[i], 
+         ks.test(get(list_DKD1[i]), y_0)$stat)
+  
+}
+
+KS_DkkMo <- max(unlist(mget(eval(list_DK2))))
+
+KS_DkkMoDRB <- max(unlist(mget(eval(list_DKD2))))
+
+KS_DRB <- max(unlist(mget(eval(list_DRB2))))
 
 ## Compute the null sampling distribution of the test statistic using bootstrap. Take 
 ## bootstrap samples from pooled control distances and compute the same statistic each 
 ## time.
-B <- 1000
+B <- 10000
 KS_0 <- rep(NA, B)
 for(b in 1:B) {
   cat(b)
@@ -104,7 +110,9 @@ for(b in 1:B) {
   y_0_1 <- sample(y_0, replace = TRUE)
   y_0_2 <- sample(y_0, replace = TRUE)
   y_0_3 <- sample(y_0, replace = TRUE)
-  KS_0[b] <- max(ks.test(y_0_1, y_0)$st, ks.test(y_0_2, y_0)$st, ks.test(y_0_3, y_0)$st)
+  KS_0[b] <- max(ks.test(y_0_1, y_0)$st, 
+                 ks.test(y_0_2, y_0)$st, 
+                 ks.test(y_0_3, y_0)$st)
 }
 
 KS_00 <- as.data.frame(x=KS_0)
