@@ -8,6 +8,7 @@
 library(e1071)
 library(ggplot2)
 
+# Load data ----
 ##
 ## Load data on distances between images. The images of two legs were superimposed on 
 ## each other, and pixel-wise distances between one image and its nearest point were 
@@ -62,6 +63,7 @@ Y <- mget(eval(c(list_DK1, list_DKD1, list_DRB1, list_NT1)))
 ## to those observed.
 ##
 
+# Pool ----
 ## Pool the control samples.
 # y_0 <- c(Y[["nt01"]],Y[["nt02"]], Y[["nt03"]], Y[["nt04"]], Y[["nt05"]], Y[["nt06"]], Y[["nt07"]], Y[["nt08"]], Y[["nt09"]], Y[["nt10"]])
 # y_1 <- c(nt01, nt02, nt03, nt04, nt05, nt06, nt07, nt08, nt09, nt10)
@@ -70,6 +72,7 @@ Y <- mget(eval(c(list_DK1, list_DKD1, list_DRB1, list_NT1)))
 y_0 <- unlist(mget(eval(list_DK1)))
 ## Compute KS test statistics comparing treatment samples to the pooled control samples.
 
+# get KS stats ----
 list_NT2 = sprintf("ks_nt%02d", 1:length(list_NT))
 list_DRB2 = sprintf("ks_drb%02d", 1:length(list_DRB))
 list_DK2 = sprintf("ks_dk%02d", 1:length(list_DK))
@@ -109,6 +112,7 @@ KS_DkkMoDRB <- max(unlist(mget(eval(list_DKD2))))
 KS_DRB <- max(unlist(mget(eval(list_DRB2))))
 # KS_DkkMoDRB <- min(unlist(mget(eval(list_DKD2))))
 
+# Bootstrap for null KS D ----
 ## Compute the null sampling distribution of the test statistic using bootstrap. Take 
 ## bootstrap samples from pooled control distances and compute the same statistic each 
 ## time.
