@@ -211,6 +211,9 @@ print("Maximum distance: %f" % max(distances))
 
 # pipmain(['uninstall','scipy'])
 
+# max pooling
+# scikit-image
+
 # import os
 # os.system('PythonSlicer -m pip install pandas')
 

@@ -22,3 +22,21 @@ b = qt.QPushButton('Toggle2')
 b.connect('clicked()',toggle)
 b.show()
 c.show()
+
+
+# max pooling
+import numpy as np
+import skimage.measure
+
+a = slicer.util.array('Volume_1 Copy')
+b = skimage.measure.block_reduce(a, (1,2,2), np.max)
+
+volumeNode = slicer.mrmlScene.AddNewNodeByClass('vtkMRMLScalarVolumeNode')
+volumeNode.CreateDefaultDisplayNodes()
+updateVolumeFromArray(volumeNode, b)
+setSliceViewerLayers(background=volumeNode)
+
+
+a = slicer.util.array('Volume_1 Copy')
+a = skimage.measure.block_reduce(a, (1,2,2), np.max)
+n.Modified()
