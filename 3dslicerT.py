@@ -36,7 +36,7 @@ volumeNode.CreateDefaultDisplayNodes()
 updateVolumeFromArray(volumeNode, b)
 setSliceViewerLayers(background=volumeNode)
 
-
+n = slicer.util.getNode('Volume_1 Copy')
 a = slicer.util.array('Volume_1 Copy')
 a = skimage.measure.block_reduce(a, (1,2,2), np.max)
 n.Modified()
