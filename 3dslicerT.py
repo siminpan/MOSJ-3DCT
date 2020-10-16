@@ -36,6 +36,37 @@ volumeNode.CreateDefaultDisplayNodes()
 updateVolumeFromArray(volumeNode, b)
 setSliceViewerLayers(background=volumeNode)
 
+# kernel for edge detection
+import numpy as np
+from scipy import ndimage
+
+a = slicer.util.array('Volume_1 Copy')
+
+a = slicer.util.array('Volume_9')
+
+d = np.delete(a, [0,a.shape[2]-1], 2)
+d = np.delete(d, [0,d.shape[1]-1], 1)
+
+
+
+kernel_laplace = np.array([np.array([1, 0, -1]), np.array([0, 0, 0]), np.array([-1, 0, 1])])
+
+kernel_laplace = np.array([np.array([0, -1, 0]), np.array([-1, 4, -1]), np.array([0, -1, 0])])
+
+kernel_laplace = np.array([np.array([1, 1, 1]), np.array([1, -8, 1]), np.array([1, 1, 1])])
+
+
+
+kernel_laplace = np.expand_dims(kernel_laplace, axis=0)
+
+b = ndimage.convolve(d, kernel_laplace, mode='reflect')
+
+volumeNode = slicer.mrmlScene.AddNewNodeByClass('vtkMRMLScalarVolumeNode')
+volumeNode.CreateDefaultDisplayNodes()
+updateVolumeFromArray(volumeNode, b)
+setSliceViewerLayers(background=volumeNode)
+
+# try rewrite a existing volume
 n = slicer.util.getNode('Volume_1 Copy')
 a = slicer.util.array('Volume_1 Copy')
 a = skimage.measure.block_reduce(a, (1,2,2), np.max)
