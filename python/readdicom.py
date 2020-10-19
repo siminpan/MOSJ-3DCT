@@ -141,7 +141,7 @@ for i in range(a.shape[2]):
     result = np.dstack((result, binary_image5))
 
 result.shape
-
+# 23_0 (596, 596, 563)
 
 from pyevtk.hl import gridToVTK
 
@@ -149,8 +149,40 @@ x = np.arange(0, result.shape[0]+1)
 y = np.arange(0, result.shape[1]+1)
 z = np.arange(0, result.shape[2]+1)
 
-gridToVTK("./23_o", x, y, z, cellData = {'julia': result})
+gridToVTK("./23_o", x, y, z, cellData = {'result': result})
 
+# write into text and load
+# Write the array to disk
+with open('23_o_test.txt', 'w') as outfile:
+    # I'm writing a header here just for the sake of readability
+    # Any line starting with "#" will be ignored by numpy.loadtxt
+    outfile.write('# Array shape: {0}\n'.format(result.shape))
+    
+    # Iterating through a ndimensional array produces slices along
+    # the last axis. This is equivalent to data[i,:,:] in this case
+    for data_slice in result:
+
+        # The formatting string indicates that I'm writing out
+        # the values in left-justified columns 7 characters in width
+        # with 2 decimal places.  
+        np.savetxt(outfile, data_slice, fmt='%-7.2f')
+
+        # Writing out a break to indicate different slices...
+        outfile.write('# New slice\n')
+
+
+# Read the array from disk
+new_data = np.loadtxt('23_o_test.txt')
+
+# Note that this returned a 2D array!
+# print new_data.shape
+
+# However, going back to 3D is easy if we know the 
+# original shape of the array
+new_data = new_data.reshape((596, 596, 563))
+    
+# Just to check that they're the same...
+assert np.all(new_data == result)
 
 # NumPy to VTK
 # http://pyscience.wordpress.com/2014/09/06/numpy-to-vtk-converting-your-numpy-arrays-to-vtk-arrays-and-files/
