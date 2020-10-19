@@ -74,3 +74,13 @@ n = slicer.util.getNode('Volume_1 Copy')
 a = slicer.util.array('Volume_1 Copy')
 a = skimage.measure.block_reduce(a, (1,2,2), np.max)
 n.Modified()
+
+# load pythong output ----
+b = np.loadtxt('C:/Users/span/Documents/3DSlicerTutorial/CNN.test/23_o_test.txt')
+b = b.reshape((596, 596, 563))
+b = np.moveaxis(b, -1, 0)
+
+volumeNode = slicer.mrmlScene.AddNewNodeByClass('vtkMRMLScalarVolumeNode')
+volumeNode.CreateDefaultDisplayNodes()
+updateVolumeFromArray(volumeNode, b)
+setSliceViewerLayers(background=volumeNode)
