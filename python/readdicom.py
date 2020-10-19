@@ -19,7 +19,7 @@ os.chdir('C:/Users/span/Documents/3DSlicerTutorial/CNN.test/')
 # load data
 # https://pyscience.wordpress.com/2014/09/08/dicom-in-python-importing-medical-image-data-into-numpy-with-pydicom-and-vtk/
 
-PathDicom = "./23_8/"
+PathDicom = "./23_5/"
 reader = vtk.vtkDICOMImageReader()
 reader.SetDirectoryName(PathDicom)
 reader.Update()
@@ -74,7 +74,7 @@ plt.pcolormesh(np.flipud(a[:, :, 80]))
 from skimage.filters import threshold_local
 
 a = ArrayDicom.copy()
-image = a[:, :, 233].copy()
+image = a[:, :, 267].copy()
 
 block_size = 25
 func = lambda arr: arr.mean()
@@ -105,14 +105,18 @@ plt.imshow(elevation_map)
 block_size = 23
 binary_image1 = image > (threshold_local(image, block_size,offset=0, method='mean')+20)
 plt.imshow(binary_image1)
+
+
 # fill holes
 from scipy import ndimage as ndi
 fill_coins = ndi.binary_fill_holes(binary_image1)
 plt.imshow(fill_coins)
+
 # edge
 from skimage.feature import canny
 binary_image3 = canny(fill_coins, sigma=1)
 plt.imshow(binary_image3)
+
 # thicker the edge
 from skimage import morphology
 binary_image4 = morphology.dilation(binary_image3, morphology.disk(radius=15))
@@ -134,9 +138,19 @@ for i in range(a.shape[2]):
     binary_image3 = canny(fill_coins, sigma=1)
     binary_image4 = morphology.dilation(binary_image3, morphology.disk(radius=15))
     binary_image5 = binary_image1 > binary_image4
-    result =  np.dstack((result, binary_image5))
+    result = np.dstack((result, binary_image5))
 
 result.shape
+
+
+from pyevtk.hl import gridToVTK
+
+x = np.arange(0, result.shape[0]+1)
+y = np.arange(0, result.shape[1]+1)
+z = np.arange(0, result.shape[2]+1)
+
+gridToVTK("./23_o", x, y, z, cellData = {'julia': result})
+
 
 # NumPy to VTK
 # http://pyscience.wordpress.com/2014/09/06/numpy-to-vtk-converting-your-numpy-arrays-to-vtk-arrays-and-files/
