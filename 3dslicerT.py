@@ -79,6 +79,8 @@ n.Modified()
 b = np.loadtxt('C:/Users/span/Documents/3DSlicerTutorial/CNN.test/23_o_test.txt')
 b = b.reshape((596, 596, 563))
 b = np.moveaxis(b, -1, 0)
+b = np.delete(b, 0, axis=0)
+b.shape
 
 volumeNode = slicer.mrmlScene.AddNewNodeByClass('vtkMRMLScalarVolumeNode')
 volumeNode.CreateDefaultDisplayNodes()
