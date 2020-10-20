@@ -76,13 +76,23 @@ a = skimage.measure.block_reduce(a, (1,2,2), np.max)
 n.Modified()
 
 # load pythong output ----
-b = np.loadtxt('C:/Users/span/Documents/3DSlicerTutorial/CNN.test/23_o_test.txt')
+b = np.loadtxt('C:/Users/span/Documents/3DSlicerTutorial/CNN.test/23_o_res_test.txt')
 b = b.reshape((596, 596, 563))
 b = np.moveaxis(b, -1, 0)
 b = np.delete(b, 0, axis=0)
+b = np.moveaxis(b, 1, 2)
 b.shape
 
 volumeNode = slicer.mrmlScene.AddNewNodeByClass('vtkMRMLScalarVolumeNode')
 volumeNode.CreateDefaultDisplayNodes()
 updateVolumeFromArray(volumeNode, b)
 setSliceViewerLayers(background=volumeNode)
+
+# IJK to RAS
+n = slicer.util.getNode('Output Volume 0.05')
+mat = vtk.vtkMatrix3x3()
+n.GetIJKToRASDirections(mat)
+
+b = slicer.util.getNode('Volume_1')
+b.SetIJKToRASDirections(mat)
+b.Modified()
