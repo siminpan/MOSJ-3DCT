@@ -49,7 +49,7 @@ ArrayDicom = ArrayDicom.reshape(ConstPixelDims, order='F')
 a = ArrayDicom.copy()
 plt.gray()
 
-plt.imshow(a[:, :, 233])
+plt.imshow(a[:, :, 267])
 
 d = a[:, :, 233].copy()
 contours = skimage.measure.find_contours(d,200)
@@ -74,7 +74,8 @@ plt.pcolormesh(np.flipud(a[:, :, 80]))
 from skimage.filters import threshold_local
 
 a = ArrayDicom.copy()
-image = a[:, :, 267].copy()
+image = a[:, :, 250].copy()
+plt.imshow(image)
 
 block_size = 25
 func = lambda arr: arr.mean()
@@ -106,10 +107,14 @@ block_size = 23
 binary_image1 = image > (threshold_local(image, block_size,offset=0, method='mean')+20)
 plt.imshow(binary_image1)
 
+# close gap (blur/extend) 
+from skimage import morphology
+binary_image2 = morphology.dilation(binary_image1, morphology.disk(radius=5))
+plt.imshow(binary_image2)
 
 # fill holes
 from scipy import ndimage as ndi
-fill_coins = ndi.binary_fill_holes(binary_image1)
+fill_coins = ndi.binary_fill_holes(binary_image2)
 plt.imshow(fill_coins)
 
 # edge
@@ -119,11 +124,15 @@ plt.imshow(binary_image3)
 
 # thicker the edge
 from skimage import morphology
-binary_image4 = morphology.dilation(binary_image3, morphology.disk(radius=15))
+binary_image4 = morphology.dilation(binary_image3, morphology.disk(radius=25))
 plt.imshow(binary_image4)
 # remove the edge
 binary_image5 = binary_image1 > binary_image4
 plt.imshow(binary_image5)
+
+# remove small object
+binary_image6 = morphology.remove_small_objects(binary_image5, 21)
+plt.imshow(binary_image6)
 
 # Append to 3d aray
 # binary_image6 =  np.dstack((binary_image5, binary_image1))
@@ -142,6 +151,8 @@ for i in range(a.shape[2]):
 
 result.shape
 # 23_0 (596, 596, 563)
+
+plt.imshow(result[:, :, 250])
 
 from pyevtk.hl import gridToVTK
 
@@ -173,7 +184,7 @@ with open('23_o_test.txt', 'w') as outfile:
 
 # Read the array from disk
 new_data = np.loadtxt('23_o_test.txt')
-
+# 'C:/Users/span/Documents/3DSlicerTutorial/CNN.test/23_o_test.txt'
 # Note that this returned a 2D array!
 # print new_data.shape
 
