@@ -1,4 +1,6 @@
+no1 = '17'
 
-modelNode = getNode('17_right')
-modelNode.GetSpacing()
-modelNode.GetOrigin()
+modelNode1 = getNode(no1+'_right')
+modelNode2 = getNode(no1+'_prediction')
+modelNode2.SetSpacing(modelNode1.GetSpacing())
+modelNode2.SetOrigin(modelNode1.GetOrigin())
