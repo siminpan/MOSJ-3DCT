@@ -1,4 +1,4 @@
-no1 = '17'
+no1 = '09'
 
 modelNode1 = getNode(no1+'_right')
 modelNode2 = getNode(no1+'_prediction')
