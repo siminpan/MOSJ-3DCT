@@ -4,6 +4,9 @@ import os
 cwd = os.getcwd()
 dir_path = os.path.dirname(os.path.realpath(__file__))
 print(cwd)
+# change the current working directory
+os.chdir(path)
+
 
 ############ 3D Slicer directory ###########################
 # https://discourse.slicer.org/t/working-directory-of-slicer/6248
@@ -210,6 +213,9 @@ print("Maximum distance: %f" % max(distances))
 # pipmain(['install','pandas'])
 
 # pipmain(['uninstall','scipy'])
+
+# max pooling
+# scikit-image
 
 # import os
 # os.system('PythonSlicer -m pip install pandas')
