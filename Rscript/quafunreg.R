@@ -389,5 +389,19 @@ dev.off()
 
 ########### end Reproduce Figure 4 ################################################################################
 
+############# We choose # of basis ###############################################################################
+
+lasso.x <- lasso.counts.fit[[2]][ (lasso.counts.fit[[2]] < 1000) ]
+lasso.x.idx <- seq(length(lasso.list1))[ (lasso.counts.fit[[2]] < 1000) ]
+list.order <- lasso.counts.fit[[1]]
+unlist(lapply(list.order, length))
+
+
+
+be <- 3
+REDUCED_BASE9 <- BETA_BASE_TOTAL_2[, list.order[[be + 8 ] ]] # our choice in paper
+REDUCED_BASE21 <- BETA_BASE_TOTAL_2[, list.order[[be + 20 ] ]] # Normal case in paper
+
+
 
 save.image(file = "/mnt/md0/zlyrebecca/sp/MOSJ-CT/05.6_3Dpoints/quafunreg_3.RData")

@@ -14,11 +14,12 @@ source("qfreg.R")
 source("inference.R")
 source("PcrQuant.R")
 
-
+save.image(paste0(path1, "/QFM-code/ACS_reproduce.RData"))
 
 
 Sys.time() -> start
-Q3cellfile <- readMat("/mnt/md0/zlyrebecca/sp/MOSJ-CT/script/Rscript/QFM-code/Q3cell.mat")
+path1 <- dirname(rstudioapi::getSourceEditorContext()$path)
+Q3cellfile <- readMat(paste0(path1, "/QFM-code/Q3cell.mat"))
 
 raw.dataset <- vector("list", 64)
 raw.length <- rep(0, 64)
@@ -80,7 +81,7 @@ p1024 <- signif(seq(0.001, 0.999, length = 1024), 4)
 
 Qy = matrix( round(unlist( lapply( raw.dataset,  quantiles_p )  ),3) , 1024 )
 write.csv(Qy, "Qy_1024.csv", row.names = FALSE )
-Qy_3 <- read.csv("Qy_1024.csv", header = TRUE)
+Qy_3 <- read.csv("~/Desktop/RAID0/zlyrebecca/sp/MOSJ-CT/script/Rscript/QFM-code/Qy_1024.csv", header = TRUE)
 Qy <- Qy_3
 
 
@@ -120,7 +121,7 @@ for (i in 1:n) {
     SET1_i_ <- sort(colum_i_[  obs_i_ > remain.counts[active.set ][j]   ])
     smPsi_i_ <- Psi[, (SET1_i_) + 1 ]
 
-    Values[(1:y.long), i, j] <- try(smPsi_i_ %*% ginv(t(smPsi_i_) %*% smPsi_i_, tol = sqrt(.Machine$double.eps)) %*% t(smPsi_i_) %*% y)
+    Values[(1:y.long), i, j] <- try(smPsi_i_ %*% (ginv(t(smPsi_i_) %*% smPsi_i_, tol = sqrt(.Machine$double.eps)) %*% (t(smPsi_i_) %*% y)))
     checks[i, j] <- length(SET1_i_)
   }
 }
