@@ -26,11 +26,15 @@ path3 = "/DkkMo-t/"
 list_DK = list.files(path = paste0(workd, path3), pattern = "_VTK_IO.csv")
 path4 = "/DkkMoDRB-t/"
 list_DKD = list.files(path = paste0(workd, path4), pattern = "_VTK_IO.csv")
+path5 = "/H-t/"
+list_H = list.files(path = paste0(workd, path5), pattern = "_VTK_IO.csv")
+
 
 list_NT1 = sprintf("nt%02d", 1:length(list_NT))
 list_DRB1 = sprintf("drb%02d", 1:length(list_DRB))
 list_DK1 = sprintf("dk%02d", 1:length(list_DK))
 list_DKD1 = sprintf("dkd%02d", 1:length(list_DKD))
+list_H1 = sprintf("hh%02d", 1:length(list_H))
 
 for (i in 1:length(list_NT)){
   assign(list_NT1[i], 
@@ -47,6 +51,10 @@ for (i in 1:length(list_DK)){
 for (i in 1:length(list_DKD)){
   assign(list_DKD1[i], 
          drop(as.matrix(read.csv(paste0(workd, path4, list_DKD[i]), skip = 1, colClasses = c(rep("numeric", 1), rep("NULL", 13)), header = F))))
+}
+for (i in 1:length(list_H)){
+  assign(list_H1[i], 
+         drop(as.matrix(read.csv(paste0(workd, path5, list_H[i]), skip = 1, colClasses = c(rep("numeric", 1), rep("NULL", 13)), header = F))))
 }
 
 ## Organize into list for convenience.
@@ -173,6 +181,7 @@ p_val_NT <- mean(KS_NT <= KS_0)
 # y_05 <- data.frame(data = -y_NT_5, id = rep("y_05", length(y_NT_5)))
 # y_06 <- data.frame(data = -y_NT_6, id = rep("y_06", length(y_NT_6)))
 
+# |__nt ----
 y_00 <- data.frame(data = numeric(), id = character())
 skewness_00 <- data.frame(skewness = numeric(), id = character(), stringsAsFactors = FALSE)
 median_00 <- data.frame(median = numeric(), id = character(), stringsAsFactors = FALSE)
@@ -226,6 +235,7 @@ h_NT2 <- ggplot(y_00, aes(x=data)) +
 
 h_NT2
 
+# |__dk ----
 dk_00 <- data.frame(data = numeric(), id = character())
 skewness_01 <- data.frame(skewness = numeric(), id = character(), stringsAsFactors = FALSE)
 median_01 <- data.frame(median = numeric(), id = character(), stringsAsFactors = FALSE)
@@ -262,6 +272,7 @@ h_DK <- ggplot(dk_00, aes(x=data)) +
 
 h_DK 
 
+# |__dkdrb ----
 dkdrb_00 <- data.frame(data = numeric(), id = character())
 skewness_02 <- data.frame(skewness = numeric(), id = character(), stringsAsFactors = FALSE)
 median_02 <- data.frame(median = numeric(), id = character(), stringsAsFactors = FALSE)
@@ -296,6 +307,7 @@ h_DKDRB <- ggplot(dkdrb_00, aes(x=data)) +
 
 h_DKDRB
 
+# |__drb ----
 drb_00 <- data.frame(data = numeric(), id = character())
 skewness_03 <- data.frame(skewness = numeric(), id = character(), stringsAsFactors = FALSE)
 median_03 <- data.frame(median = numeric(), id = character(), stringsAsFactors = FALSE)
@@ -329,4 +341,36 @@ h_DRB <- ggplot(drb_00, aes(x=data)) +
 
 h_DRB
 
+# |__h ----
+hh_00 <- data.frame(data = numeric(), id = character())
+skewness_04 <- data.frame(skewness = numeric(), id = character(), stringsAsFactors = FALSE)
+median_04 <- data.frame(median = numeric(), id = character(), stringsAsFactors = FALSE)
+for(i in 1:7){
+  nam <- paste("hh_", sprintf("%02d", as.numeric(i)), sep = "")
+  assign(nam, 
+         data.frame(data = -get(paste("hh", sprintf("%02d", as.numeric(i)), sep = "")), 
+                    id = rep(paste("hh_", sprintf("%02d", as.numeric(i)), sep = ""), 
+                             length(get(paste("hh", sprintf("%02d", as.numeric(i)), sep = ""))))))
+  hh_00 <- rbind(hh_00, get(nam))
+  skewness_04[i,1] <- skewness(get(nam)$data, type = 2)
+  skewness_04[i,2] <- paste("hh_", sprintf("%02d", as.numeric(i)), sep = "")
+  median_04[i,1] <- median(get(nam)$data) 
+  median_04[i,2] <- paste("hh_", sprintf("%02d", as.numeric(i)), sep = "")
+}
 
+h_hh <- ggplot(hh_00, aes(x=data)) + 
+  geom_vline(xintercept = 0, linetype="dotted", 
+             color = "red", size=1.0) +
+  xlim(-0.5, 0.5) +
+  geom_histogram(data = subset(hh_00,id == 'hh_01'), fill = colors()[1], alpha = 0.3) + 
+  geom_histogram(data = subset(hh_00,id == 'hh_02'), fill = colors()[11], alpha = 0.3) +
+  geom_histogram(data = subset(hh_00,id == 'hh_03'), fill = colors()[21], alpha = 0.3) +
+  geom_histogram(data = subset(hh_00,id == 'hh_04'), fill = colors()[31], alpha = 0.3) +
+  geom_histogram(data = subset(hh_00,id == 'hh_05'), fill = colors()[41], alpha = 0.3) +
+  geom_histogram(data = subset(hh_00,id == 'hh_06'), fill = colors()[51], alpha = 0.3) +
+  geom_histogram(data = subset(hh_00,id == 'hh_07'), fill = colors()[61], alpha = 0.3)
+  # geom_histogram(data = subset(hh_00,id == 'hh_08'), fill = colors()[71], alpha = 0.3) +
+  # geom_histogram(data = subset(hh_00,id == 'hh_09'), fill = colors()[81], alpha = 0.3) +
+  # geom_histogram(data = subset(hh_00,id == 'hh_10'), fill = colors()[91], alpha = 0.3)
+
+h_hh
