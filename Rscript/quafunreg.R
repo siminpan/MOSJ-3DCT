@@ -399,9 +399,241 @@ unlist(lapply(list.order, length))
 
 
 be <- 3
-REDUCED_BASE9 <- BETA_BASE_TOTAL_2[, list.order[[be + 8 ] ]] # our choice in paper
-REDUCED_BASE21 <- BETA_BASE_TOTAL_2[, list.order[[be + 20 ] ]] # Normal case in paper
+REDUCED_BASE9 <- BETA_BASE_TOTAL_2[, list.order[[be + 3 ] ]] # our choice in paper
+REDUCED_BASE21 <- BETA_BASE_TOTAL_2[, list.order[[be + 13 ] ]] # Normal case in paper
+
+############ rearrange basis order #################################
+
+
+# Sys.time() -> start
+grids.total.list <- vector("list", length(raw.dataset))
+for (i in 1:n) {
+  y <- raw.dataset[[i]]
+  y.long <- length(y)
+  grid.p <- seq(1 / (y.long + 1), y.long / (y.long + 1), 1 / (y.long + 1))
+  grids.total.list[[i]] <- unique(round(grid.p, 4))
+}
+
+cbind(unlist(lapply(grids.total.list, length)), unlist(lapply(raw.dataset, length)), unlist(lapply(grids.total.list, length)) == unlist(lapply(raw.dataset, length)))
+grids.total <- seq(0.0001, 0.9999, 0.0001)
+grids.total.obs <- sort(unique(unlist(grids.total)))
+
+
+### here we unify grid set as p1024, otherwise, it made too many problem. gramshumit, memory error, irregar, empiricalQ
+grids.total <- p1024
+CDFBETA <- GENERATE_BETA_CDF(a1, a2, grids.total)
+NQ <- qnorm(grids.total)
+BNQ <- (NQ - mean(NQ)) / sqrt(sum((NQ - mean(NQ))^2))
+BETA_BASE_TOTAL_2 <- cbind(BNQ, t(CDFBETA))
 
 
 
-save.image(file = "/mnt/md0/zlyrebecca/sp/MOSJ-CT/05.6_3Dpoints/quafunreg_3.RData")
+############ compute quanvelts basis #################################
+
+REDUCED_BASE9 <- BETA_BASE_TOTAL_2[, list.order[[be + 3 ] ]]
+
+Gram9 <- gramSchmidt(REDUCED_BASE9, tol = .Machine$double.eps^0.5)
+norms <- gramSchmidt(as.matrix(REDUCED_BASE21), tol = .Machine$double.eps^0.5)$Q
+Quantlet9 <- WaveletDenose(Gram9$Q[, -1], filter.number = 2, family = "DaubExPhase")[, , 2]
+Quantlet9s <- cbind(norms, centering.function(Quantlet9, scale = TRUE))
+Quantlet21s <- norms
+
+############ Reproduce Figure 4###############################################################################################
+
+tiff("Figure4.tiff",
+     width = 16, height = 12, units = "in", res = 160, bg = "transparent"
+)
+par(mfrow = c(4, 4), mar = c(4, 2, 3, 2))
+plot(p1024, rep(1, 1024), type = "l", lty = 1, lwd = 0.2, main = bquote("Quantlet" ~ psi[.(1)]))
+for (v in 1:15) {
+  if (v >= 7) {
+    ylims <- c(-0.05, 0.05)
+  }
+  if (v < 7) {
+    ylims <- c(-0.2, 0.2)
+  }
+  plot(p1024, Quantlet9s[, v], type = "l", lty = 1, lwd = 0.2, main = bquote("Quantlet" ~ psi[.(v + 1)]), ylim = ylims, xlab = "")
+}
+dev.off()
+
+################ compute empirical coefficients ###########################################################################
+
+
+EmpCoefs_9 <- EmpCoefs(Quantlet9s, Y.list = raw.dataset1)
+
+EmpCoefs <- function(B, Y.list) {
+  n <- length(Y.list)
+  mats <- matrix(NA, nrow = n, ncol = (dim(B)[2] + 1))
+  for (i in 1:n) {
+    y <- Y.list[[i]]
+    y.long <- length(y)
+    set.seed(123 + i)
+    grids <- sort(sample(dim(B)[1], y.long))
+    Psi <- cbind(rep(1, length(grids)), B[ grids, ])
+    mats[i, ] <- solve(t(Psi) %*% Psi) %*% t(Psi) %*% y
+  }
+  return(mats)
+}
+# Times.over.emp <- (Sys.time() - start)
+
+########### import covariates and manage them to analysis ##########################################################################################
+
+
+# Sys.time() -> start
+library(survival)
+
+DATA <- read.csv("~/Desktop/RAID0/zlyrebecca/sp/MOSJ-CT/05.6_3Dpoints/bone_covariates.csv", header = TRUE)
+int <- rep(1, length(raw.dataset))
+X <- as.matrix(cbind(int,DATA[,c(2,5)]))
+colnames(X)[1] = "i"
+
+################## estimation #############################################################################################
+
+
+Emp_fit_9 <- EmpQuant2(EmpCoefs_9, REDUCED_BASE9, Quantlet9s, X, delta2 = 0.95, H = 7)
+
+
+####  Cluster is a local function to cluster basis indices based on their eigen-values within qfreg.R
+
+Cluster <- function(REDUCED_BASE, orthobais, H = 7) {
+  lambda_v <- t(REDUCED_BASE) %*% orthobais
+  est_eigen <- round(diag(t(lambda_v) %*% lambda_v), 8)
+  if (length(est_eigen) >= 6) {
+    H1 <- H - 1
+    hc <- hclust(dist(est_eigen)^2, "cen")
+    r <- cutree(hc, k = H1)
+  }
+  if (length(est_eigen) < 6) {
+    H1 <- H - 1
+    r <- seq(length(est_eigen))
+  }
+  return(c(1, r + 1))
+}
+
+Cluster_9 <- Cluster(REDUCED_BASE9, Gram9$Q, H = 7)
+
+
+
+mcmc_fit_9 <- MCMC_QUANTLET(X, Y = Emp_fit_9$sd_l2, Cluster_9, Emp_fit_9$TB00, zeroKept = FALSE, n.iter = 2000, burn = 200)
+
+
+# mm_1 <- c(1, 1,0.5,0.5)
+# mm_2 <- c(1, 0,0.5,0.5)
+# mm_3 <- c(1, 0.5,max(X[,3]), 0.5)
+# mm_4 <- c(1, 0.5,0,0.5)
+# mm_5 <- c(1, 0.5,0.5,1)
+# mm_6 <- c(1, 0.5,0.5,0)
+
+# mm_1 <- c( 1,0.5,0.5)
+# mm_2 <- c( 1,0.5,0.5)
+mm_3 <- c( 1,1, 0.5)
+mm_4 <- c( 1,0,0.5)
+mm_5 <- c( 1,0.5,1)
+mm_6 <- c( 1,0.5,0)
+
+
+
+PX0 <- rbind(mm_3, mm_4, mm_5, mm_6)
+X1 <- PX0
+
+
+mcmcInfer_9 <- inference(mcmc_fit_9[[1]], BackTransfor = Emp_fit_9$sdPhi, X, signifit = 0.975, X1 = PX0, p = p1024, n.sup = 77, xranges = c(-10, 60))
+
+
+Ip <- diag(rep(1, length(p1024)), length(p1024), length(p1024))
+
+
+##  MCMC_PCR  -- conducts MCMC computaions based on PC regression
+
+mcmc_fit_22 <- MCMC_PCR(X, t(Qy), BackTransfor = Ip, n.iter = 2000, burn = 200)
+mcmcInfer_22 <- inference(mcmc_fit_22[[1]], BackTransfor = Ip, X, signifit = 0.975, X1 = PX0, p = p1024, n.sup = 77, xranges = c(-10, 60))
+
+
+mcmc_fit_9_norm <- MCMC_NRPCT(mcmc_fit_9[[1]], 0.975, PX0)
+
+mcmc_fit_22_norm <- MCMC_NRPCT(mcmc_fit_22[[1]], 0.975, PX0)
+
+
+Times.over.est <- (Sys.time() - start)
+
+
+source("/mnt/md0/zlyrebecca/sp/MOSJ-CT/script/Rscript/QFM-code/plots.R")
+
+n.sup <- 77
+xdomain <- seq(-10, 60, length.out = n.sup)
+
+############ Reproduce Figure 6 ###############################################################################################
+mcmcinfer_object = mcmcInfer_9
+p = p1024
+edit=10
+opt = 1 
+
+plot(   0, type="n",    ylim= c( -0.03,  0.03), xlim=c(0,1)   , main="" )
+lines( p,  mcmcinfer_object$DataEst[,2], col="red"  , lty=1  , lwd=2 )  
+lines( p,  mcmcinfer_object$estCIu[,2], col="gray"  , lty=2  , lwd=2 )  
+lines( p,  mcmcinfer_object$estCIl[,2], col="gray"  , lty=2  , lwd=2 )  
+lines(  p , mcmcinfer_object$jointCI[ ,2,1 ], col="black" , lty=3  , lwd=2 )
+lines(  p , mcmcinfer_object$jointCI[ ,2,2 ], col="black" , lty=3  , lwd=2 )
+
+title( paste0( paste0( "Weight (p=", round( mcmcinfer_object$global_p[1] ,3) ), sep="", ")", sep="" ), cex=1.5 )
+points(p[mcmcinfer_object$local_p[,1]],  -20*mcmcinfer_object$local_p[,1][mcmcinfer_object$local_p[,1]==TRUE] , col="orange"   )
+
+plot(   0, type="n",    ylim= c( -0.07,  0.03), xlim=c(0,1)   , main="" )
+lines( p,  mcmcinfer_object$DataEst[,3], col="red"  , lty=1  , lwd=2 )  
+lines( p,  mcmcinfer_object$estCIu[,3], col="gray"  , lty=2  , lwd=2 )  
+lines( p,  mcmcinfer_object$estCIl[,3], col="gray"  , lty=2  , lwd=2 )  
+lines(  p , mcmcinfer_object$jointCI[ ,3,1 ], col="black" , lty=3  , lwd=2 )
+lines(  p , mcmcinfer_object$jointCI[ ,3,2 ], col="black" , lty=3  , lwd=2 )
+
+title( paste0( paste0( "Tibia loss (p=", round( mcmcinfer_object$global_p[2] ,3) ), sep="", ")", sep="" ), cex=1.5 )
+points(p[mcmcinfer_object$local_p[,1]],  -20*mcmcinfer_object$local_p[,1][mcmcinfer_object$local_p[,1]==TRUE] , col="orange"   )
+############ Reproduce Figure 7 ###############################################################################################
+tiff(
+  "Figure7.tiff",
+  width = 8, height = 5, units = "in", res = 150, bg = "transparent"
+)
+
+opt <- 1
+
+par(mfrow = c(1, 2), mar = c(2.5, 2.5, 3, 2))
+
+plot(0, type = "n", ylim = c(-15, 45), xlim = c(0, 1), main = "")
+lines(p1024, mcmcInfer_9$DataEst[, 4], col = "hotpink", lty = 1, lwd = 2)
+lines(p1024, mcmcInfer_9$estCIu[, 4], col = "gray", lty = 2, lwd = 2)
+lines(p1024, mcmcInfer_9$estCIl[, 4], col = "gray", lty = 2, lwd = 2)
+lines(p1024, mcmcInfer_9$jointCI[, 4, 1 ], col = "black", lty = 3, lwd = 2)
+lines(p1024, mcmcInfer_9$jointCI[, 4, 2 ], col = "black", lty = 3, lwd = 2)
+
+title("A", cex = 1.5)
+points(p1024[mcmcInfer_9$local_p[, 3]], -15 * mcmcInfer_9$local_p[, 3][mcmcInfer_9$local_p[, 3] == TRUE], col = "orange")
+
+
+legend(0.1, 47,
+       pch = c(NA, NA, NA, 19),
+       c("DDIT3 effect", "95% CI (point)", "95% CI (joint)", "Flag"),
+       lty = c(1, 2, 3, 1),
+       col = c("hotpink", "gray", "black", "orange"),
+       cex = 1.5, bty = "n", ncol = 1
+)
+
+plot(0, type = "n", ylim = c(-15, 45), xlim = c(0, 1), main = "")
+lines(p1024, mcmcInfer_22$DataEst[, 4], col = "hotpink", lty = 1, lwd = 2)
+lines(p1024, mcmcInfer_22$estCIu[, 4], col = "gray", lty = 2, lwd = 2)
+lines(p1024, mcmcInfer_22$estCIl[, 4], col = "gray", lty = 2, lwd = 2)
+lines(p1024, mcmcInfer_22$jointCI[, 4, 1 ], col = "black", lty = 3, lwd = 2)
+lines(p1024, mcmcInfer_22$jointCI[, 4, 2 ], col = "black", lty = 3, lwd = 2)
+
+title("B", cex = 1.5)
+points(p1024[mcmcInfer_22$local_p[, 3]], -15 * mcmcInfer_22$local_p[, 3][mcmcInfer_22$local_p[, 3] == TRUE], col = "orange")
+
+legend(0.1, 47,
+       pch = c(NA, NA, NA, NA),
+       c("DDIT3 effect", "95% CI (point)", "95% CI (joint)", NA),
+       lty = c(1, 2, 3, NA),
+       col = c("hotpink", "gray", "black", NA),
+       cex = 1.5, bty = "n", ncol = 1
+)
+
+dev.off()
+
+save.image(file = "/mnt/md0/zlyrebecca/sp/MOSJ-CT/05.6_3Dpoints/quafunreg_4.RData")
