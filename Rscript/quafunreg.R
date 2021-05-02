@@ -484,13 +484,32 @@ library(survival)
 
 DATA <- read.csv("~/Desktop/RAID0/zlyrebecca/sp/MOSJ-CT/05.6_3Dpoints/bone_covariates.csv", header = TRUE)
 int <- rep(1, length(raw.dataset))
-X <- as.matrix(cbind(int,DATA[,c(2,5)]))
+NT <- c(rep(0,29),rep(1,10))
+DRB <- c(rep(0,10),rep(1,19),rep(0,10))
+Dkk <- c(rep(1,19),rep(0,20))
+inter <- Dkk*DRB
+
+range01 <- function(x){(x-min(x))/(max(x)-min(x))}
+
+X <- as.matrix(cbind(int,DRB,Dkk,inter,NT,DATA[,c(2)],range01(DATA[,c(3)]),DATA[,c(5)]))
 colnames(X)[1] = "i"
+
+X <- as.matrix(cbind(NT,DRB,Dkk,inter))
+
+# all compare ----
+# NT vs DkkMo, DkkMoDRB vs DRB ----
+NT2 <- c(rep(0,29),rep(1,10))
+DRB2 <- c(rep(0,19),rep(1,10),rep(0,10))
+Dkk2 <- c(rep(1,10),rep(0,29))
+inter2 <- c(rep(0,10),rep(1,9),rep(0,20))
+
+X <- as.matrix(cbind(NT2,DRB2,Dkk2,inter2))
+
 
 ################## estimation #############################################################################################
 
 
-Emp_fit_9 <- EmpQuant2(EmpCoefs_9, REDUCED_BASE9, Quantlet9s, X, delta2 = 0.95, H = 7)
+Emp_fit_9 <- EmpQuant2(EmpCoefs_9, REDUCED_BASE9, Quantlet9s, X, delta2 = 0.95, H = 4)
 
 
 ####  Cluster is a local function to cluster basis indices based on their eigen-values within qfreg.R
@@ -510,20 +529,14 @@ Cluster <- function(REDUCED_BASE, orthobais, H = 7) {
   return(c(1, r + 1))
 }
 
-Cluster_9 <- Cluster(REDUCED_BASE9, Gram9$Q, H = 7)
+Cluster_9 <- Cluster(REDUCED_BASE9, Gram9$Q, H = 4)
 
 
 
 mcmc_fit_9 <- MCMC_QUANTLET(X, Y = Emp_fit_9$sd_l2, Cluster_9, Emp_fit_9$TB00, zeroKept = FALSE, n.iter = 2000, burn = 200)
 
 
-# mm_1 <- c(1, 1,0.5,0.5)
-# mm_2 <- c(1, 0,0.5,0.5)
-# mm_3 <- c(1, 0.5,max(X[,3]), 0.5)
-# mm_4 <- c(1, 0.5,0,0.5)
-# mm_5 <- c(1, 0.5,0.5,1)
-# mm_6 <- c(1, 0.5,0.5,0)
-
+# begin test ----
 # mm_1 <- c( 1,0.5,0.5)
 # mm_2 <- c( 1,0.5,0.5)
 mm_3 <- c( 1,1, 0.5)
@@ -531,13 +544,103 @@ mm_4 <- c( 1,0,0.5)
 mm_5 <- c( 1,0.5,1)
 mm_6 <- c( 1,0.5,0)
 
+# X "i" "DRB" "Dkk" "weight" "tibiaabsorb"
+mm_1 <- c( 1,1,0.5,0,0)
+mm_2 <- c( 1,0,0.5,0,0)
+mm_3 <- c( 1,0.5,1,0,0)
+mm_4 <- c( 1,0.5,0,0,0)
+mm_5 <- c( 1,0.5,0.5,max(X[,4]),0)
+mm_6 <- c( 1,0.5,0.5,0,0)
+mm_7 <- c( 1,0.5,0.5,0,max(X[,5]))
+mm_8 <- c( 1,0.5,0.5,0,0)
+
+# X "i" "DRB" "Dkk" "weight" "log.tabg." "tibiaabsorb"
+mm_1 <- c( 1,1,0.5,0,0,0)
+mm_2 <- c( 1,0,0.5,0,0,0)
+mm_3 <- c( 1,0.5,1,0,0,0)
+mm_4 <- c( 1,0.5,0,0,0,0)
+mm_5 <- c( 1,0.5,0.5,max(X[,4]),0,0)
+mm_6 <- c( 1,0.5,0.5,0,0,0)
+mm_7 <- c( 1,0.5,0.5,0,max(X[,5]),0)
+mm_8 <- c( 1,0.5,0.5,0,0,0)
+mm_9 <- c( 1,0.5,0.5,0,0,max(X[,6]))
+mm_10 <- c( 1,0.5,0.5,0,0,0)
+
+# X "i" "DRB" "Dkk" "inter" "weight" "log.tabg."  "tibiaabsorb"
+mm_1 <- c( 1,1,0.5,0.5,0,0,0)
+mm_2 <- c( 1,0,0.5,0.5,0,0,0)
+mm_3 <- c( 1,0.5,1,0.5,0,0,0)
+mm_4 <- c( 1,0.5,0,0.5,0,0,0)
+mm_11 <- c( 1,0.5,0.5,1,0,0,0)
+mm_12 <- c( 1,0.5,0.5,0,0,0,0)
+mm_5 <- c( 1,0.5,0.5,0.5,max(X[,4]),0,0)
+mm_6 <- c( 1,0.5,0.5,0.5,0,0,0)
+mm_7 <- c( 1,0.5,0.5,0.5,0,max(X[,5]),0)
+mm_8 <- c( 1,0.5,0.5,0.5,0,0,0)
+mm_9 <- c( 1,0.5,0.5,0.5,0,0,max(X[,6]))
+mm_10 <- c( 1,0.5,0.5,0.5,0,0,0)
 
 
-PX0 <- rbind(mm_3, mm_4, mm_5, mm_6)
+# X "i" "DRB" "Dkk" "inter" "weight" "tibiaabsorb"
+mm_1 <- c( 1,1,0.5,0.5,0,0)
+mm_2 <- c( 1,0,0.5,0.5,0,0)
+mm_3 <- c( 1,0.5,1,0.5,0,0)
+mm_4 <- c( 1,0.5,0,0.5,0,0)
+mm_7 <- c( 1,0.5,0.5,0.5,max(X[,5]),0)
+mm_8 <- c( 1,0.5,0.5,0.5,0,0)
+mm_9 <- c( 1,0.5,0.5,0.5,0,max(X[,6]))
+mm_10 <- c( 1,0.5,0.5,0.5,0,0)
+mm_11 <- c( 1,0.5,0.5,1,0,0)
+mm_12 <- c( 1,0.5,0.5,0,0,0)
+
+# X "i" "DRB" "Dkk" "inter" "NT" "weight" "log.tabg."  "tibiaabsorb"
+mm_1 <- c( 1,1,0.5,0.5,0.5,0,0,0)
+mm_2 <- c( 1,0,0.5,0.5,0.5,0,0,0)
+mm_3 <- c( 1,0.5,1,0.5,0.5,0,0,0)
+mm_4 <- c( 1,0.5,0,0.5,0.5,0,0,0)
+mm_11 <- c( 1,0.5,0.5,1,0.5,0,0,0)
+mm_12 <- c( 1,0.5,0.5,0,0.5,0,0,0)
+mm_13 <- c( 1,0.5,0.5,0.5,1,0,0,0)
+mm_14 <- c( 1,0.5,0.5,0.5,0,0,0,0)
+mm_5 <- c( 1,0.5,0.5,0.5,0.5,max(X[,4]),0,0)
+mm_6 <- c( 1,0.5,0.5,0.5,0.5,0,0,0)
+mm_7 <- c( 1,0.5,0.5,0.5,0.5,0,max(X[,5]),0)
+mm_8 <- c( 1,0.5,0.5,0.5,0.5,0,0,0)
+mm_9 <- c( 1,0.5,0.5,0.5,0.5,0,0,max(X[,6]))
+mm_10 <- c( 1,0.5,0.5,0.5,0.5,0,0,0)
+
+PX0 <- rbind(mm_1,mm_2,mm_3, mm_4,mm_11,mm_12,mm_13,mm_14,mm_5,mm_6,mm_7,mm_8,mm_9,mm_10)
+# end test ----
+
+# all compare ----
+# NT,DRB,Dkk,inter
+mm_1 <- c(1,0.5,0.5,0.5)
+mm_2 <- c(0,0.5,0.5,0.5)
+mm_3 <- c(0.5,1,0.5,0.5)
+mm_4 <- c(0.5,0,0.5,0.5)
+mm_5 <- c(0.5,0.5,1,0.5)
+mm_6 <- c(0.5,0.5,0,0.5)
+mm_7 <- c(0.5,0.5,0.5,1)
+mm_8 <- c(0.5,0.5,0.5,0)
+
+PX0 <- rbind(mm_1,mm_2,mm_3, mm_4,mm_5,mm_6,mm_7,mm_8)
 X1 <- PX0
 
+# NT vs DkkMo, DkkMoDRB vs DRB ----
+# NT,DRB,Dkk,inter
+mm_1 <- c(1,0.5,0.5,0.5)
+mm_2 <- c(0.5,0.5,0,0.5)
+mm_3 <- c(0.5,1,0.5,0.5)
+mm_4 <- c(0.5,0.5,0.5,0)
 
-mcmcInfer_9 <- inference(mcmc_fit_9[[1]], BackTransfor = Emp_fit_9$sdPhi, X, signifit = 0.975, X1 = PX0, p = p1024, n.sup = 77, xranges = c(-10, 60))
+PX0 <- rbind(mm_1,mm_2,mm_3,mm_4)
+X1 <- PX0
+
+n.sup1 = 100
+xranges1 = c(-0.6, 1.3)
+signifit1 = 0.975
+
+mcmcInfer_9 <- inference(mcmc_fit_9[[1]], BackTransfor = Emp_fit_9$sdPhi, X, signifit = signifit1, X1 = PX0, p = p1024, n.sup = n.sup1, xranges = xranges1)
 
 
 Ip <- diag(rep(1, length(p1024)), length(p1024), length(p1024))
@@ -546,12 +649,12 @@ Ip <- diag(rep(1, length(p1024)), length(p1024), length(p1024))
 ##  MCMC_PCR  -- conducts MCMC computaions based on PC regression
 
 mcmc_fit_22 <- MCMC_PCR(X, t(Qy), BackTransfor = Ip, n.iter = 2000, burn = 200)
-mcmcInfer_22 <- inference(mcmc_fit_22[[1]], BackTransfor = Ip, X, signifit = 0.975, X1 = PX0, p = p1024, n.sup = 77, xranges = c(-10, 60))
+mcmcInfer_22 <- inference(mcmc_fit_22[[1]], BackTransfor = Ip, X, signifit = signifit1, X1 = PX0, p = p1024, n.sup = n.sup1, xranges = xranges1)
 
 
-mcmc_fit_9_norm <- MCMC_NRPCT(mcmc_fit_9[[1]], 0.975, PX0)
+mcmc_fit_9_norm <- MCMC_NRPCT(mcmc_fit_9[[1]], signifit1, PX0)
 
-mcmc_fit_22_norm <- MCMC_NRPCT(mcmc_fit_22[[1]], 0.975, PX0)
+mcmc_fit_22_norm <- MCMC_NRPCT(mcmc_fit_22[[1]], signifit1, PX0)
 
 
 Times.over.est <- (Sys.time() - start)
@@ -559,8 +662,8 @@ Times.over.est <- (Sys.time() - start)
 
 source("/mnt/md0/zlyrebecca/sp/MOSJ-CT/script/Rscript/QFM-code/plots.R")
 
-n.sup <- 77
-xdomain <- seq(-10, 60, length.out = n.sup)
+n.sup <- n.sup1
+xdomain <- seq(xranges1[1], xranges1[2], length.out = n.sup)
 
 ############ Reproduce Figure 6 ###############################################################################################
 mcmcinfer_object = mcmcInfer_9
@@ -568,25 +671,30 @@ p = p1024
 edit=10
 opt = 1 
 
-plot(   0, type="n",    ylim= c( -0.03,  0.03), xlim=c(0,1)   , main="" )
-lines( p,  mcmcinfer_object$DataEst[,2], col="red"  , lty=1  , lwd=2 )  
-lines( p,  mcmcinfer_object$estCIu[,2], col="gray"  , lty=2  , lwd=2 )  
-lines( p,  mcmcinfer_object$estCIl[,2], col="gray"  , lty=2  , lwd=2 )  
-lines(  p , mcmcinfer_object$jointCI[ ,2,1 ], col="black" , lty=3  , lwd=2 )
-lines(  p , mcmcinfer_object$jointCI[ ,2,2 ], col="black" , lty=3  , lwd=2 )
+# plots.R has more plot sample
 
-title( paste0( paste0( "Weight (p=", round( mcmcinfer_object$global_p[1] ,3) ), sep="", ")", sep="" ), cex=1.5 )
-points(p[mcmcinfer_object$local_p[,1]],  -20*mcmcinfer_object$local_p[,1][mcmcinfer_object$local_p[,1]==TRUE] , col="orange"   )
+# all compare ----
+plot( 0, type="n",    ylim=c(0,11), xlim=c(-0.3,0.4)  )
+lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,1] , col="black", lty=1 , lwd=1) # NT
+lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,3] , col="red", lty=1 , lwd=1)  # DRB
+lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,5] , col="blue", lty=1 , lwd=1) # DKKMo
+lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,7] , col="orange", lty=1 , lwd=1) # DKKMoDRB
+title( "Predicted densities" , cex=1.5)
 
-plot(   0, type="n",    ylim= c( -0.07,  0.03), xlim=c(0,1)   , main="" )
-lines( p,  mcmcinfer_object$DataEst[,3], col="red"  , lty=1  , lwd=2 )  
-lines( p,  mcmcinfer_object$estCIu[,3], col="gray"  , lty=2  , lwd=2 )  
-lines( p,  mcmcinfer_object$estCIl[,3], col="gray"  , lty=2  , lwd=2 )  
-lines(  p , mcmcinfer_object$jointCI[ ,3,1 ], col="black" , lty=3  , lwd=2 )
-lines(  p , mcmcinfer_object$jointCI[ ,3,2 ], col="black" , lty=3  , lwd=2 )
+legend( 0.05, 11,
+        c("NT", "DRB", "DKKMo", "Combination"),
+        lty= c(1,1,1,1)  ,
+        col =c("black","red","blue" ,"orange") ,
+        cex = 1 , bty = "n", ncol=1)
 
-title( paste0( paste0( "Tibia loss (p=", round( mcmcinfer_object$global_p[2] ,3) ), sep="", ")", sep="" ), cex=1.5 )
-points(p[mcmcinfer_object$local_p[,1]],  -20*mcmcinfer_object$local_p[,1][mcmcinfer_object$local_p[,1]==TRUE] , col="orange"   )
+# all compare zoom in ----
+plot(   0, type="n",    ylim=c(3,4), xlim=c(-0.15,0.15)  )
+lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,1] , col="black", lty=1 , lwd=1) # NT
+lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,3] , col="red", lty=1 , lwd=1)  # DRB
+lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,5] , col="blue", lty=1 , lwd=1) # DKKMo
+lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,7] , col="orange", lty=1 , lwd=1) # DKKMoDRB
+title( "DkkMoDRB" , cex=1.5)
+
 ############ Reproduce Figure 7 ###############################################################################################
 tiff(
   "Figure7.tiff",
@@ -636,4 +744,4 @@ legend(0.1, 47,
 
 dev.off()
 
-save.image(file = "/mnt/md0/zlyrebecca/sp/MOSJ-CT/05.6_3Dpoints/quafunreg_4.RData")
+save.image(file = "/mnt/md0/zlyrebecca/sp/MOSJ-CT/05.6_3Dpoints/quafunreg_5.RData")
