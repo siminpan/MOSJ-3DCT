@@ -610,6 +610,33 @@ mm_9 <- c( 1,0.5,0.5,0.5,0.5,0,0,max(X[,6]))
 mm_10 <- c( 1,0.5,0.5,0.5,0.5,0,0,0)
 
 PX0 <- rbind(mm_1,mm_2,mm_3, mm_4,mm_11,mm_12,mm_13,mm_14,mm_5,mm_6,mm_7,mm_8,mm_9,mm_10)
+
+# NT,DRB,Dkk,inter
+mm_1 <- c(1,0.5,0.5,0.5)
+mm_2 <- c(0.5,0.5,0,0.5)
+mm_3 <- c(0.5,1,0.5,0.5)
+mm_4 <- c(0.5,0.5,0.5,0)
+
+PX0 <- rbind(mm_1,mm_2,mm_3,mm_4)
+X1 <- PX0
+
+# NT vs DkkMo, DkkMoDRB vs DRB,DkkMoDRB vs DkkMo  still working
+# NT,DRB,Dkk,inter
+mm_1 <- c(1,0.5,0.5,0.5) # NT
+mm_2 <- c(0.5,0.5,0,0.5) # Dkk
+mm_3 <- c(0.5,1,0.5,0.5) # DRB
+mm_4 <- c(0.5,0.5,0.5,0) # inter
+mm_5 <- c(0.5,0.5,0.5,1) # inter
+mm_6 <- c(0.5,0.5,0,0.5) # Dkk
+
+PX0 <- rbind(mm_1,mm_2,mm_3,mm_4,mm_5,mm_6)
+X1 <- PX0
+
+# NT,DRB,Dkk,inter
+mm_1 <- c(1,0.5,0.5,0.5)
+mm_2 <- c(0.5,0.5,0,0.5)
+mm_3 <- c(0.5,1,0.5,0.5)
+mm_4 <- c(0.5,0.5,0.5,0)
 # end test ----
 
 # all compare ----
@@ -626,16 +653,74 @@ mm_8 <- c(0.5,0.5,0.5,0)
 PX0 <- rbind(mm_1,mm_2,mm_3, mm_4,mm_5,mm_6,mm_7,mm_8)
 X1 <- PX0
 
-# NT vs DkkMo, DkkMoDRB vs DRB ----
+# NT vs DkkMo, NT vs DkkMoDRB ----
 # NT,DRB,Dkk,inter
 mm_1 <- c(1,0.5,0.5,0.5)
 mm_2 <- c(0.5,0.5,0,0.5)
 mm_3 <- c(0.5,1,0.5,0.5)
 mm_4 <- c(0.5,0.5,0.5,0)
 
-PX0 <- rbind(mm_1,mm_2,mm_3,mm_4)
+mm_1 <- c(1,0.5,0,0.5)
+mm_2 <- c(0,0.5,1,0.5)
+mm_3 <- c(0.5,1,0.5,0)
+mm_4 <- c(0.5,0,0.5,1)
+
+mm_1 <- c(1,0.5,0.25,0.5)
+mm_2 <- c(0.25,0.5,1,0.5)
+mm_3 <- c(0.5,1,0.5,0.25)
+mm_4 <- c(0.5,0.25,0.5,1)
+mm_5 <- c(1,0.25,0.5,0.5)
+mm_6 <- c(0.25,1,0.5,0.5)
+mm_7 <- c(0.5,0.5,1,0.25)
+mm_8 <- c(0.5,0.5,0.25,1)
+
+mm_1 <- c(1,0.5,0,0.5)
+mm_2 <- c(0,0.5,1,0.5)
+mm_3 <- c(1,0.5,0.5,0)
+mm_4 <- c(0,0.5,0.5,1)
+mm_5 <- c(1,0,0.5,0.5)
+mm_6 <- c(0,1,0.5,0.5)
+
+mm_1 <- c(1,0,0,0)
+mm_2 <- c(0,0,1,0)
+mm_3 <- c(1,0,0,0)
+mm_4 <- c(0,0,0,1)
+mm_5 <- c(0,1,0,0)
+mm_6 <- c(0,0,0,1)
+
+mm_1 <- c(1,0,0,0)
+mm_2 <- c(0,0,1,0)
+mm_3 <- c(1,0,0,0)
+mm_4 <- c(0,0,0,1)
+mm_5 <- c(0,1,0,0)
+mm_6 <- c(0,0,0,1)
+mm_7 <- c(1,1,0,0)
+mm_8 <- c(0,0,1,1)
+
+# .5 figures in summary v2
+mm_1 <- c(1,0.5,0,0.5)
+mm_2 <- c(0,0.5,1,0.5)
+mm_3 <- c(1,0.5,0.5,0)
+mm_4 <- c(0,0.5,0.5,1)
+mm_5 <- c(0.5,1,0.5,0)
+mm_6 <- c(0.5,0,0.5,1)
+mm_7 <- c(1,1,0.5,0.5)
+mm_8 <- c(0.5,0.5,1,1)
+
+mm_1 <- c(1,0.25,0,0.25)
+mm_2 <- c(0,0.25,1,0.25)
+mm_3 <- c(1,0.25,0.25,0)
+mm_4 <- c(0,0.25,0.25,1)
+mm_5 <- c(0.25,1,0.25,0)
+mm_6 <- c(0.25,0,0.25,1)
+mm_7 <- c(1,1,0.25,0.25)
+mm_8 <- c(0.25,0.25,1,1)
+
+PX0 <- rbind(mm_1,mm_2,mm_3,mm_4,mm_5,mm_6,mm_7,mm_8)
 X1 <- PX0
 
+
+{
 n.sup1 = 100
 xranges1 = c(-0.6, 1.3)
 signifit1 = 0.975
@@ -657,10 +742,10 @@ mcmc_fit_9_norm <- MCMC_NRPCT(mcmc_fit_9[[1]], signifit1, PX0)
 mcmc_fit_22_norm <- MCMC_NRPCT(mcmc_fit_22[[1]], signifit1, PX0)
 
 
-Times.over.est <- (Sys.time() - start)
+# Times.over.est <- (Sys.time() - start)
 
 
-source("/mnt/md0/zlyrebecca/sp/MOSJ-CT/script/Rscript/QFM-code/plots.R")
+# source("/mnt/md0/zlyrebecca/sp/MOSJ-CT/script/Rscript/QFM-code/plots.R")
 
 n.sup <- n.sup1
 xdomain <- seq(xranges1[1], xranges1[2], length.out = n.sup)
@@ -670,30 +755,161 @@ mcmcinfer_object = mcmcInfer_9
 p = p1024
 edit=10
 opt = 1 
-
+}
 # plots.R has more plot sample
 
 # all compare ----
-plot( 0, type="n",    ylim=c(0,11), xlim=c(-0.3,0.4)  )
+png(
+  "all compare3.png",
+  width = 6, height = 7, units = "in", res = 300, bg = "transparent"
+)
+plot( 0, type="n",    ylim=c(0,11), xlim=c(-0.2,0.3)  )
 lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,1] , col="black", lty=1 , lwd=1) # NT
 lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,3] , col="red", lty=1 , lwd=1)  # DRB
 lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,5] , col="blue", lty=1 , lwd=1) # DKKMo
 lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,7] , col="orange", lty=1 , lwd=1) # DKKMoDRB
 title( "Predicted densities" , cex=1.5)
 
-legend( 0.05, 11,
+legend( 0.1, 11,
         c("NT", "DRB", "DKKMo", "Combination"),
         lty= c(1,1,1,1)  ,
         col =c("black","red","blue" ,"orange") ,
         cex = 1 , bty = "n", ncol=1)
-
+dev.off()
 # all compare zoom in ----
+png(
+  "all compare.zoom3.png",
+  width = 6, height = 7, units = "in", res = 300, bg = "transparent"
+)
 plot(   0, type="n",    ylim=c(3,4), xlim=c(-0.15,0.15)  )
 lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,1] , col="black", lty=1 , lwd=1) # NT
 lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,3] , col="red", lty=1 , lwd=1)  # DRB
 lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,5] , col="blue", lty=1 , lwd=1) # DKKMo
 lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,7] , col="orange", lty=1 , lwd=1) # DKKMoDRB
-title( "DkkMoDRB" , cex=1.5)
+title( "Predicted densities zoom in" , cex=1.5)
+legend( -0.15, 4,
+        c("NT", "DRB", "DKKMo", "Combination"),
+        lty= c(1,1,1,1)  ,
+        col =c("black","red","blue" ,"orange") ,
+        cex = 1 , bty = "n", ncol=1)
+dev.off()
+
+# NT vs DkkMo, NT vs DkkMoDRB ----
+# NT vs DkkMo ----
+png(
+  "NT vs DkkMo.png",
+  width = 6, height = 7, units = "in", res = 300, bg = "transparent"
+)
+plot(   0, type="n",    ylim=c(0,3), xlim=c(-0.4,0.5)  )
+lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,2] , col="green3", lty=1 , lwd=1)  # DKKMo 
+lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,1] , col="blue", lty=1 , lwd=1) # NT
+# lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,5] , col="red", lty=1 , lwd=1) # DRB
+# lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,4] , col="orange", lty=1 , lwd=1) # DKKMoDRB
+# lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,8] , col="purple", lty=1 , lwd=1) # No DkkMo
+# lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,7] , col="dark green", lty=1 , lwd=1) # With DkkMo
+legend( 0.1, 3,
+        c("NT dist", "DKKMo dist",
+          paste0( paste0( "NT shift (p=", round( mcmcinfer_object$mu_diff[1, 8] ,3) ), sep="", ")", sep="" ) ,
+          paste0( paste0( "Var shift (p=", round( mcmcinfer_object$sigma_diff[1, 8] ,3) ), sep="", ")", sep="" )
+          # paste0( paste0( "Skewed shift (p=", round(mcmcinfer_object$mu3_diff[colno5-1, 8] ,3) ), sep="", ")", sep="" )  
+          ),
+        lty= c(1,1,NA,NA)  ,
+        col =c("blue","green3",NA ,NA) ,
+        cex = 1 , bty = "n", ncol=1)
+dev.off()
+# DRB vs Comb ----
+png(
+  "DRB vs Comb.png",
+  width = 6, height = 7, units = "in", res = 300, bg = "transparent"
+)
+plot(   0, type="n",    ylim=c(0,3), xlim=c(-0.4,0.5)  )
+# lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,2] , col="blue", lty=1 , lwd=1)  # DKKMo 
+# lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,1] , col="black", lty=1 , lwd=1) # NT
+lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,5] , col="red", lty=1 , lwd=1) # DRB
+lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,6] , col="purple", lty=1 , lwd=1) # DKKMoDRB
+# lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,8] , col="purple", lty=1 , lwd=1) # No DkkMo
+# lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,7] , col="dark green", lty=1 , lwd=1) # With DkkMo
+legend( 0.1, 3,
+        c("DRB dist", "Comb dist",
+          paste0( paste0( "DRB shift (p=", round( mcmcinfer_object$mu_diff[3, 8] ,3) ), sep="", ")", sep="" ) ,
+          paste0( paste0( "Var shift (p=", round( mcmcinfer_object$sigma_diff[3, 8] ,3) ), sep="", ")", sep="" ) #,
+          # paste0( paste0( "Skewed shift (p=", round(mcmcinfer_object$mu3_diff[colno5-1, 8] ,3) ), sep="", ")", sep="" )  
+          ),
+        lty= c(1,1,NA,NA)  ,
+        col =c("red","purple",NA ,NA) ,
+        cex = 1 , bty = "n", ncol=1)
+dev.off()
+# NT vs Comb ----
+png(
+  "NT vs Comb.png",
+  width = 6, height = 7, units = "in", res = 300, bg = "transparent"
+)
+plot(   0, type="n",    ylim=c(0,3), xlim=c(-0.4,0.5)  )
+# lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,2] , col="blue", lty=1 , lwd=1)  # DKKMo 
+# lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,1] , col="black", lty=1 , lwd=1) # NT
+lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,3] , col="blue", lty=1 , lwd=1) # NT
+lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,4] , col="purple", lty=1 , lwd=1) # DKKMoDRB
+# lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,8] , col="purple", lty=1 , lwd=1) # No DkkMo
+# lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,7] , col="dark green", lty=1 , lwd=1) # With DkkMo
+legend( 0.1, 3,
+        c("NT dist", "Comb dist",
+          paste0( paste0( "NT shift (p=", round( mcmcinfer_object$mu_diff[2, 8] ,3) ), sep="", ")", sep="" ) ,
+          paste0( paste0( "Var shift (p=", round( mcmcinfer_object$sigma_diff[2, 8] ,3) ), sep="", ")", sep="" ) #,
+          # paste0( paste0( "Skewed shift (p=", round(mcmcinfer_object$mu3_diff[colno5-1, 8] ,3) ), sep="", ")", sep="" )  
+        ),
+        lty= c(1,1,NA,NA)  ,
+        col =c("blue","purple",NA ,NA) ,
+        cex = 1 , bty = "n", ncol=1)
+dev.off()
+# DkkMo vs without ----
+png(
+  "DkkMo vs without.png",
+  width = 6, height = 7, units = "in", res = 300, bg = "transparent"
+)
+plot(   0, type="n",    ylim=c(0,2), xlim=c(-0.5,0.6)  )
+# lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,2] , col="blue", lty=1 , lwd=1)  # DKKMo 
+# lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,1] , col="black", lty=1 , lwd=1) # NT
+# lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,5] , col="red", lty=1 , lwd=1) # DRB
+# lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,4] , col="orange", lty=1 , lwd=1) # DKKMoDRB
+lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,8] , col="brown", lty=1 , lwd=1) # No DkkMo
+lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,7] , col="dodgerblue2", lty=1 , lwd=1) # With DkkMo
+legend( 0.1, 2,
+        c("With DkkMo", "Without DkkMo",
+          paste0( paste0( "Mean shift (p=", round( mcmcinfer_object$mu_diff[4, 8] ,3) ), sep="", ")", sep="" ) ,
+          paste0( paste0( "Var shift (p=", round( mcmcinfer_object$sigma_diff[4, 8] ,3) ), sep="", ")", sep="" )# ,
+          # paste0( paste0( "Kurtosis shift (p=", round(mcmcinfer_object$mu4_diff[4, 8] ,3) ), sep="", ")", sep="" )  
+          ),
+        lty= c(1,1,NA,NA)  ,
+        col =c("brown","dodgerblue2",NA ,NA) ,
+        cex = 1 , bty = "n", ncol=1)
+dev.off()
+
+# NT vs DkkMo Comb ----
+png(
+  "NT vs DkkMo Comb2.png",
+  width = 6, height = 7, units = "in", res = 300, bg = "transparent"
+)
+plot(   0, type="n",    ylim=c(0,3), xlim=c(-0.4,0.7)  )
+lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,2] , col="green3", lty=1 , lwd=1)  # DKKMo 
+lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,1] , col="blue", lty=1 , lwd=1) # NT
+lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,4] , col="purple", lty=1 , lwd=1) # DKKMoDRB
+lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,5] , col="red", lty=1 , lwd=1) # DRB
+# lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,5] , col="red", lty=1 , lwd=1) # DRB
+# lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,4] , col="orange", lty=1 , lwd=1) # DKKMoDRB
+# lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,8] , col="purple", lty=1 , lwd=1) # No DkkMo
+# lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,7] , col="dark green", lty=1 , lwd=1) # With DkkMo
+legend( 0.1, 3,
+        c("NT dist","DRB dist", "DKKMo dist", "Comb dist",
+          paste0( paste0( "1. NT vs DkkMo (p=", round( mcmcinfer_object$mu_diff[1, 8] ,3) ), sep="", ")", sep="" ) ,
+          paste0( paste0( "2. NT vs Comb (p=", round( mcmcinfer_object$mu_diff[2, 8] ,3) ), sep="", ")", sep="" ) ,
+          paste0( paste0( "1. Var shift (p=", round( mcmcinfer_object$sigma_diff[1, 8] ,3) ), sep="", ")", sep="" ),
+          paste0( paste0( "2. Var shift (p=", round( mcmcinfer_object$sigma_diff[2, 8] ,3) ), sep="", ")", sep="" )
+          # paste0( paste0( "Skewed shift (p=", round(mcmcinfer_object$mu3_diff[colno5-1, 8] ,3) ), sep="", ")", sep="" )  
+        ),
+        lty= c(1,1,1,1,NA,NA,NA,NA)  ,
+        col =c("blue","red","green3","purple",NA ,NA,NA,NA) ,
+        cex = 1 , bty = "n", ncol=1)
+dev.off()
 
 ############ Reproduce Figure 7 ###############################################################################################
 tiff(
@@ -705,7 +921,7 @@ opt <- 1
 
 par(mfrow = c(1, 2), mar = c(2.5, 2.5, 3, 2))
 
-plot(0, type = "n", ylim = c(-15, 45), xlim = c(0, 1), main = "")
+plot(0, type = "n", ylim = c(-0.2, 0.5), xlim = c(0, 1), main = "")
 lines(p1024, mcmcInfer_9$DataEst[, 4], col = "hotpink", lty = 1, lwd = 2)
 lines(p1024, mcmcInfer_9$estCIu[, 4], col = "gray", lty = 2, lwd = 2)
 lines(p1024, mcmcInfer_9$estCIl[, 4], col = "gray", lty = 2, lwd = 2)
@@ -724,7 +940,7 @@ legend(0.1, 47,
        cex = 1.5, bty = "n", ncol = 1
 )
 
-plot(0, type = "n", ylim = c(-15, 45), xlim = c(0, 1), main = "")
+plot(0, type = "n", ylim = c(-0.2, 0.5), xlim = c(0, 1), main = "")
 lines(p1024, mcmcInfer_22$DataEst[, 4], col = "hotpink", lty = 1, lwd = 2)
 lines(p1024, mcmcInfer_22$estCIu[, 4], col = "gray", lty = 2, lwd = 2)
 lines(p1024, mcmcInfer_22$estCIl[, 4], col = "gray", lty = 2, lwd = 2)

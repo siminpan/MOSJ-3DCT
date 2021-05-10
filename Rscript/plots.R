@@ -408,3 +408,84 @@ plot(   0, type="n",    ylim=c(0,10), xlim=c(-1,1)  )
 lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,2] , col="black", lty=1 , lwd=1)
 lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,1] , col="red", lty=1 , lwd=2)  
 title( "NT" , cex=1.5)
+
+# NT vs DkkMo ----
+plot(   0, type="n",    ylim=c(0,6), xlim=c(-0.5,0.5)  )
+lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,2] , col="blue", lty=1 , lwd=1) # DKKMo
+lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,1] , col="black", lty=1 , lwd=1) # NT
+title( "NT vs DkkMo" , cex=1.5)
+legend( 0.2, 4,
+        c("NT dist", "DkkMo dist",
+          paste0( paste0( "NT shift (p=", round( mcmcinfer_object$mu_diff[1, 8] ,3) ), sep="", ")", sep="" ) ,
+          paste0( paste0( "Var shift (p=", round( mcmcinfer_object$sigma_diff[1, 8] ,3) ), sep="", ")", sep="" ) ,
+          paste0( paste0( "Skewed shift (p=", round(mcmcinfer_object$mu3_diff[1, 8] ,3) ), sep="", ")", sep="" )  ),
+        lty= c(1,1,NA,NA,NA)  ,
+        col =c("black","blue",NA ,NA, NA) ,
+        cex = 1 , bty = "n", ncol=1)
+# NT vs DkkMo zoomed in----
+plot(   0, type="n",    ylim=c(4,6), xlim=c(-0.2,0.2)  )
+lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,2] , col="blue", lty=1 , lwd=1) # DKKMo
+lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,1] , col="black", lty=1 , lwd=1) # NT
+title( "NT vs DkkMo" , cex=1.5)
+
+
+# NT vs DkkMoDRB ----
+plot(   0, type="n",    ylim=c(0,6), xlim=c(-0.5,0.5)  )
+lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,4] , col="orange", lty=1 , lwd=1) # DKKMoDRB
+lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,3] , col="black", lty=1 , lwd=1)  # NT
+title( "Combination vs DRB" , cex=1.5)
+legend( -10+edit, 0.18,
+        c("DkkMoDRB dist", "Other dist",
+          paste0( paste0( "DkkMoDRB shift (p=", round( mcmcinfer_object$mu_diff[colno5-1, 8] ,3) ), sep="", ")", sep="" ) ,
+          paste0( paste0( "Var shift (p=", round( mcmcinfer_object$sigma_diff[colno5-1, 8] ,3) ), sep="", ")", sep="" ) ,
+          paste0( paste0( "Skewed shift (p=", round(mcmcinfer_object$mu3_diff[colno5-1, 8] ,3) ), sep="", ")", sep="" )  ),
+        lty= c(1,1,NA,NA,NA)  ,
+        col =c("red","black",NA ,NA, NA) ,
+        cex = 1.5 , bty = "n", ncol=1)
+# DkkMoDRB vs DkkMo ----
+plot(   0, type="n",    ylim=c(0,4), xlim=c(-0.5,0.5)  )
+lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,7] , col="blue", lty=1 , lwd=1)  # DKKMo 
+lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,8] , col="orange", lty=1 , lwd=1) # DKKMoDRB
+title( "Combination vs DkkMo" , cex=1.5)
+legend( -10+edit, 0.18,
+        c("DkkMoDRB dist", "Other dist",
+          paste0( paste0( "DkkMoDRB shift (p=", round( mcmcinfer_object$mu_diff[colno5-1, 8] ,3) ), sep="", ")", sep="" ) ,
+          paste0( paste0( "Var shift (p=", round( mcmcinfer_object$sigma_diff[colno5-1, 8] ,3) ), sep="", ")", sep="" ) ,
+          paste0( paste0( "Skewed shift (p=", round(mcmcinfer_object$mu3_diff[colno5-1, 8] ,3) ), sep="", ")", sep="" )  ),
+        lty= c(1,1,NA,NA,NA)  ,
+        col =c("red","black",NA ,NA, NA) ,
+        cex = 1.5 , bty = "n", ncol=1)
+
+# test ----
+plot(   0, type="n",    ylim=c(0,3), xlim=c(-0.4,0.5)  )
+lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,2] , col="blue", lty=1 , lwd=1)  # DKKMo 
+lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,1] , col="black", lty=1 , lwd=1) # NT
+lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,5] , col="red", lty=1 , lwd=1) # DRB
+lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,4] , col="orange", lty=1 , lwd=1) # DKKMoDRB
+# lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,8] , col="purple", lty=1 , lwd=1) # No DkkMo
+# lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,7] , col="dark green", lty=1 , lwd=1) # With DkkMo
+legend( -10+edit, 0.18,
+        c("DkkMoDRB dist", "Other dist",
+          paste0( paste0( "DkkMoDRB shift (p=", round( mcmcinfer_object$mu_diff[colno5-1, 8] ,3) ), sep="", ")", sep="" ) ,
+          paste0( paste0( "Var shift (p=", round( mcmcinfer_object$sigma_diff[colno5-1, 8] ,3) ), sep="", ")", sep="" ) ,
+          paste0( paste0( "Skewed shift (p=", round(mcmcinfer_object$mu3_diff[colno5-1, 8] ,3) ), sep="", ")", sep="" )  ),
+        lty= c(1,1,NA,NA,NA)  ,
+        col =c("red","black",NA ,NA, NA) ,
+        cex = 1.5 , bty = "n", ncol=1)
+
+# test DkkMo vs No DkkMo----
+plot(   0, type="n",    ylim=c(0,2), xlim=c(-0.5,0.6)  )
+# lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,2] , col="blue", lty=1 , lwd=1)  # DKKMo 
+# lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,1] , col="black", lty=1 , lwd=1) # NT
+# lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,5] , col="red", lty=1 , lwd=1) # DRB
+# lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,4] , col="orange", lty=1 , lwd=1) # DKKMoDRB
+lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,8] , col="purple", lty=1 , lwd=1) # No DkkMo
+lines(  xdomain[-1] ,  mcmcinfer_object$den_G[,7] , col="dark green", lty=1 , lwd=1) # With DkkMo
+legend( -10+edit, 0.18,
+        c("DkkMoDRB dist", "Other dist",
+          paste0( paste0( "DkkMoDRB shift (p=", round( mcmcinfer_object$mu_diff[colno5-1, 8] ,3) ), sep="", ")", sep="" ) ,
+          paste0( paste0( "Var shift (p=", round( mcmcinfer_object$sigma_diff[colno5-1, 8] ,3) ), sep="", ")", sep="" ) ,
+          paste0( paste0( "Skewed shift (p=", round(mcmcinfer_object$mu3_diff[colno5-1, 8] ,3) ), sep="", ")", sep="" )  ),
+        lty= c(1,1,NA,NA,NA)  ,
+        col =c("red","black",NA ,NA, NA) ,
+        cex = 1.5 , bty = "n", ncol=1)
