@@ -98,7 +98,7 @@ rm(raw.dataset.thin)
 
 Sys.time() -> start
 lasso.list <- vector("list", length(raw.dataset))
-for (i in 24:length(raw.dataset)) {
+for (i in 1:length(raw.dataset)) {
   cat("\n",i, "start")
   y <- raw.dataset[[i]]
   y.long <- length(y)
