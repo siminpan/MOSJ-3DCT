@@ -81,7 +81,10 @@ for (i in 1:length(raw.dataset)) {
 
 load("/mnt/md0/zlyrebecca/sp/MOSJ-CT/05.6_3Dpoints/quafunreg_raw.data.RData")
 
-seq(1, length(raw.dataset[[i]]), 10)
+# seq(1, length(raw.dataset[[i]]), 10)
+# raw.dataset[[i]][order(unlist(raw.dataset[[i]]),decreasing = T)][-c(1:1)][seq(1, length(raw.dataset[[i]]), thinn)][c(1:10)]
+
+
 raw.dataset.thin = raw.dataset
 
 for (i in 1:length(raw.dataset)) {
